@@ -20,7 +20,7 @@ This creates three problems. It is inconvenient for the customer, who must make 
 
 The system is built around a single business transaction: **a customer submits one online footwear return request for a previous TigerSteps purchase.**
 
-| | |
+| Field | Description |
 |---|---|
 | **Event** | A customer submits one online footwear return request for a previous TigerSteps purchase. |
 | **Trigger** | The customer decides to return footwear from a previous TigerSteps purchase. |

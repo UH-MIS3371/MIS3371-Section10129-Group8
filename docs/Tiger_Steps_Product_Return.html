@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    WEEK 4 — SESSION 1 LIVE DEMO
+    Goal: move from Week 3 transaction design to a clean semantic HTML page.
+
+    Teaching focus:
+    1. Basic HTML document structure
+    2. Elements + nesting
+    3. Semantic HTML
+    4. Attributes
+    5. Edit → Save → Refresh → Verify
+  -->
+
+  <meta charset="UTF-8">
+
+  <!-- Helps the page display properly on different screen sizes -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Appears in the browser tab -->
+  <title>Expense Reimbursement</title>
+
+  <style>
+    :root {
+      --page-bg: #3b6895;
+      --panel-bg: #ffffff;
+      --header-bg: #050505;
+      --header-accent: #f7a93b;
+      --primary-text: #1d2a36;
+      --muted-text: #586776;
+      --border: #dce3ea;
+      --shadow: rgba(13, 59, 102, 0.12);
+      --button-bg: #f39a2d;
+      --button-hover: #df8719;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef3f7 0%, #f8fafb 100%);
+      color: var(--primary-text);
+      line-height: 1.5;
+    }
+
+    header {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.18) 0 8%,
+          rgba(255, 153, 0, 0.92) 8% 16%,
+          rgba(0, 0, 0, 0.18) 16% 24%,
+          rgba(255, 153, 0, 0.92) 24% 32%,
+          rgba(0, 0, 0, 0.18) 32% 40%,
+          rgba(255, 153, 0, 0.92) 40% 48%,
+          rgba(0, 0, 0, 0.18) 48% 56%,
+          rgba(255, 153, 0, 0.92) 56% 64%,
+          rgba(0, 0, 0, 0.18) 64% 72%,
+          rgba(255, 153, 0, 0.92) 72% 80%,
+          rgba(0, 0, 0, 0.18) 80% 88%,
+          rgba(255, 153, 0, 0.92) 88% 100%
+        ),
+        linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+      background-blend-mode: multiply, normal;
+      color: #ffffff;
+      text-align: center;
+      padding: 2rem 1rem 1.5rem;
+      box-shadow: 0 4px 14px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.12) 0 10px,
+        rgba(255, 153, 0, 0.9) 10px 20px,
+        rgba(0, 0, 0, 0.12) 20px 30px,
+        rgba(255, 153, 0, 0.9) 30px 40px
+      );
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.28);
+    }
+
+    header p {
+      margin: 0;
+      font-size: 1.05rem;
+      opacity: 0.92;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem 2rem;
+    }
+
+    section {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    section h2 {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      color: var(--header-bg);
+      border-bottom: 2px solid rgba(13, 59, 102, 0.12);
+      padding-bottom: 0.5rem;
+    }
+
+    section p {
+      margin-top: 0;
+      color: var(--muted-text);
+    }
+
+    form {
+      margin-top: 1rem;
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      background: #f9fbfd;
+      border-radius: 12px;
+      padding: 1.25rem 1.25rem 0.5rem;
+    }
+
+    legend {
+      font-weight: 700;
+      color: var(--header-bg);
+      padding: 0 0.5rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.9rem 0 0.45rem;
+      font-weight: 600;
+      color: var(--primary-text);
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      max-width: 420px;
+      padding: 0.72rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--primary-text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--header-accent);
+      box-shadow: 0 0 0 3px rgba(247, 169, 59, 0.18);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      max-width: none;
+      margin-right: 0.55rem;
+      accent-color: var(--button-bg);
+      transform: translateY(1px);
+    }
+
+    label[for="receiptAttached"] {
+      display: inline-block;
+      margin: 0.2rem 0 0;
+      font-weight: 500;
+      color: var(--primary-text);
+    }
+
+    #receiptHelp {
+      min-height: 20px;
+      margin-top: 0.5rem;
+      color: var(--muted-text);
+    }
+
+    button {
+      display: inline-block;
+      background: var(--button-bg);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.9rem 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--button-hover);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted-text);
+      padding: 1rem 0 2rem;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--
+    <header> = introductory area of the page.
+    It communicates the purpose of the page.
+  -->
+  <header>
+    <h1>TigerSteps Product Return Request</h1>
+    <p>Submit one return request for your shoes order</p>
+  </header>
+
+  <!--
+    <main> = the primary content of this page.
+    A page should normally have one main content region.
+  -->
+  <main>
+
+    <!--
+      <section> groups related content.
+      This first section gives instructions before the transaction form.
+    -->
+    <section>
+      <h2>Before You Submit</h2>
+      <p>Please have your name, phone number, email address, and receipt information ready.</p>
+    </section>
+
+    <!--
+      This second section represents the future transaction-entry area.
+
+      In Session 1, we stop at structure.
+      In Session 2, we will place the actual <form> and controls here.
+    -->
+    <section>
+      <h2>Return Details</h2>
+
+      <!--
+        <form> groups the controls that participate in one submission.
+
+        method="get" is used only for this classroom demo.
+        After a valid submission, notice that the field NAMES appear
+        in the browser URL as submitted data.
+
+        In the real capstone, submission will later go through
+        JavaScript/API/backend logic.
+      -->
+      <form method="get">
+
+        <!--
+          <fieldset> groups related controls.
+          <legend> gives the group a meaningful name.
+        -->
+        <fieldset>
+
+          <legend>Return Details</legend>
+
+          <!-- =====================================================
+               Order Comfirmation Number 
+               ===================================================== -->
+
+          <!--
+            for="employeeId" must match id="employeeId".
+            This connects the visible label to the input.
+          -->
+          <label for="CustName">Customer Name</label>
+          <input
+            id="CustName"
+            name="CustName"
+            type="text"
+            required
+          >
+          <br><br>
+
+          <label for="custPhone#">Phone Number</label>
+          <input
+            id="custPhone#"
+            name="custPhone#"
+            type="tel"
+            required
+          >
+          <br><br>
+
+          <label for="custEmail">Email Address</label>
+          <input
+            id="custEmail"
+            name="custEmail"
+            type="email"
+            required
+          >
+          <br><br>
+
+          <label for="orderID">Order ID</label>
+          <!--for connect the label to input id-->
+          <input
+            id="orderID"
+            name="orderID"
+            type="text"
+            required
+          >
+          <!-- <br> new line-->
+          <br><br>
+
+          <!-- =====================================================
+               Return Date
+               ===================================================== -->
+
+          <label for="dayDelivered">Day Delivered</label>
+
+          <input
+            id="dayDelivered"
+            name="dayDelivered"
+            type="date"
+            required
+          >
+
+          <br><br>
+
+          <!-- =====================================================
+               PRODUCT
+               ===================================================== -->
+
+          <label for="Product">Product</label>
+
+          <!--
+            <select> is appropriate because the business allows
+            a known set of products.
+          -->
+          <select
+            id="Product"
+            name="Product"
+            required
+          >
+            <option value="">Choose a product</option>
+            <option value="Model 1">Model 1</option>
+            <option value="Model 2">Model 2</option>
+            <option value="Model 3">Model 3</option>
+            <option value="other">Other</option>
+          </select>
+
+          <br><br>
+
+          <!-- =====================================================
+               AMOUNT
+               ===================================================== -->
+
+          <label for="returnAmount">Return Amount ($)</label>
+
+          <!--
+            Native constraints:
+            required   = cannot be empty
+            min="0.01" = must be greater than zero
+            step="0.01" = allows values such as 184.50
+
+            IMPORTANT:
+            We do NOT set max="5000".
+            An amount above $5,000 is still VALID data.
+            It simply triggers a different business workflow later.
+          -->
+          <input
+            id="returnAmount"
+            name="returnAmount"
+            type="number"
+            required
+            min="0.01"
+            step="0.01"
+            aria-describedby="receiptHelp"
+          >
+
+          <br><br>
+
+          <!-- =====================================================
+               DESCRIPTION
+               ===================================================== -->
+
+          <label for="description">Reason for Return / Descprition</label>
+          <br>
+
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            cols="45"
+            required
+          ></textarea>
+
+          <br><br>
+
+          <!-- =====================================================
+               RECEIPT CHECKBOX
+               ===================================================== -->
+
+          <!--
+            Checkbox = yes/no flag.
+
+            BUSINESS RULE FOR LATER:
+            If amount > $75, a receipt is required.
+
+            Basic HTML cannot express this conditional rule by itself.
+            JavaScript and server/application logic will handle it later.
+          -->
+          <input
+            id="receiptAttached"
+            name="receiptAttached"
+            type="checkbox"
+            value="yes"
+            aria-describedby="receiptHelp"
+          >
+
+          <label for="receiptAttached">
+            Receipt attached
+          </label>
+
+          <p id="receiptHelp">
+          </p>
+
+        </fieldset>
+
+        <br>
+
+        <!--
+          type="submit" asks the browser to submit the form.
+
+          Before submission, the browser checks the native constraints.
+          Try:
+          - leaving a required field empty
+          - entering amount = 0
+          - entering amount = 5600
+        -->
+        <button type="submit">
+          Submit Request
+        </button>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>MIS 3371 — Week 4 Live Demo</p>
+  </footer>
+
+</body>
+</html>
