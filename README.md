@@ -39,8 +39,8 @@ The rules that drive the decision are listed in [Business Rules](#business-rules
 | Member | Role and responsibility |
 |---|---|
 | **Brieana Dinh** | Team leader. Final quality and integration approval, setting up meetings and deadlines. |
-| **Danna Z. Gonzalez** | Business Problem, Main Transaction, and Scope |
-| **Samantha Abi-Ranched** | Stakeholders and Requirements |
+| **Danna Z. Gonzalez** | Defining Business Problem, Main Transaction, and Scope |
+| **Samantha Abi-Ranched** | Defining Stakeholders and Requirements |
 | **Justin Vu** | Business Rules and Transaction States |
 | **Nhu Tran** | Team Charter and GitHub setup |
 
