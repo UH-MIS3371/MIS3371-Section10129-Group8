@@ -56,23 +56,29 @@ function isReturnWindowExpired(deliveryDate) {
     return daysSinceDelivery < 0 || daysSinceDelivery > 60;
 }
 
-function quantityMessageFor(quantityPurchased, returnQuantity) {
+function checkReturnQuantity(quantityPurchased, returnQuantity) {
     if (quantityPurchased === '' || returnQuantity === '') {
-        return '';
+        return { isValid: false, message: '' };
     }
 
     const purchased = Number(quantityPurchased);
     const requested = Number(returnQuantity);
 
     if (!Number.isFinite(purchased) || !Number.isFinite(requested) || purchased < 1 || requested < 1) {
-        return 'Enter valid quantities greater than zero.';
+        return {
+            isValid: false,
+            message: 'Enter valid quantities greater than zero.'
+        };
     }
 
     if (requested > purchased) {
-        return 'Return quantity cannot exceed the quantity originally purchased.';
+        return {
+            isValid: false,
+            message: 'Return quantity cannot exceed the quantity originally purchased.'
+        };
     }
 
-    return 'Return quantity is valid.';
+    return { isValid: true, message: 'Return quantity is valid.' };
 }
 
 // ============================================================
@@ -93,10 +99,10 @@ function updateQuantityStatus() {
         return;
     }
 
-    quantityMessage.textContent = quantityMessageFor(
+    quantityMessage.textContent = checkReturnQuantity(
         quantityPurchasedInput.value,
         returnQuantityInput.value
-    );
+    ).message;
 }
 
 // Runs when the customer submits the return request.
@@ -104,29 +110,26 @@ function handleSubmit(event) {
     event.preventDefault();
 
     const itemCode = itemInput.value;
-    const quantityPurchased = Number(quantityPurchasedInput.value);
-    const returnQuantity = Number(returnQuantityInput.value);
+    const quantityResult = checkReturnQuantity(
+        quantityPurchasedInput.value,
+        returnQuantityInput.value
+    );
     const deliveryDate = dayDeliveredInput.value;
-    const quantityIsValid = Number.isFinite(quantityPurchased) && Number.isFinite(returnQuantity)
-        && quantityPurchased >= 1 && returnQuantity >= 1 && returnQuantity <= quantityPurchased;
 
     if (quantityMessage) {
-        quantityMessage.textContent = quantityMessageFor(
-            quantityPurchasedInput.value,
-            returnQuantityInput.value
-        );
+        quantityMessage.textContent = quantityResult.message;
     }
 
     const canReturn = itemCode !== ''
         && !isFinalSale(itemCode)
         && !isReturnWindowExpired(deliveryDate)
-        && quantityIsValid;
+        && quantityResult.isValid;
 
     let decisionMessage = returnMessageFor(itemCode);
 
     if (itemCode === '') {
         decisionMessage = returnMessageFor(itemCode);
-    } else if (!quantityIsValid) {
+    } else if (!quantityResult.isValid) {
         decisionMessage = 'REJECTED: Return quantity must be a valid number greater than zero and cannot exceed the original purchase quantity.';
     } else if (isReturnWindowExpired(deliveryDate)) {
         decisionMessage = 'REJECTED: return window expired.';
@@ -171,6 +174,20 @@ console.log('TS-3001 ->', returnMessageFor('TS-3001'));
 console.log('--- BR-1 tests ---');
 console.log('invalid ->', isReturnWindowExpired(''));
 console.log('future date ->', isReturnWindowExpired('2099-12-31'));
-console.log('today ->', isReturnWindowExpired(new Date().toISOString().slice(0, 10)));
-console.log('within 60 days ->', isReturnWindowExpired('2026-09-01'));
-console.log('expired ->', isReturnWindowExpired('2026-07-01'));
+function dateDaysAgo(days) {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - days);
+    return date.getFullYear() + '-'
+        + String(date.getMonth() + 1).padStart(2, '0') + '-'
+        + String(date.getDate()).padStart(2, '0');
+}
+console.log('59 days ->', isReturnWindowExpired(dateDaysAgo(59))); // false
+console.log('60 days ->', isReturnWindowExpired(dateDaysAgo(60))); // false
+console.log('61 days ->', isReturnWindowExpired(dateDaysAgo(61))); // true
+
+console.log('--- BR-3 tests ---');
+console.log('Purchased 2, return 1 ->', checkReturnQuantity(2, 1)); // valid
+console.log('Purchased 2, return 2 ->', checkReturnQuantity(2, 2)); // valid (exact boundary)
+console.log('Purchased 2, return 3 ->', checkReturnQuantity(2, 3)); // invalid
+console.log('Purchased 2, return 0 ->', checkReturnQuantity(2, 0)); // invalid
