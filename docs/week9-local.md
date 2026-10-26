@@ -1,5 +1,5 @@
 
-# Week 9 — TigerSteps Local Frontend, Backend, and API Checkpoint (4 Points)
+# Week 9 — TigerSteps Local Frontend, Backend, and API Checkpoint
 
 ## Required Result
 
