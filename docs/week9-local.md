@@ -199,8 +199,122 @@ This checkpoint focuses on connecting the existing frontend and backend through 
 
 Cloud integration and database persistence will be introduced in subsequent course checkpoints.
 
+## Week 9 API Testing Evidence
+
+The following screenshots document the integration of the TigerSteps frontend with our local Node.js/Express API. Testing was performed using Chrome DevTools to inspect HTTP requests, response status codes, and JSON responses.
+
+### 1. Frontend-to-Backend Network Connection
+
+The Chrome DevTools Network tab shows successful communication between the TigerSteps frontend and Express server.
+
+The application sends HTTP requests for order lookup and return eligibility validation.
+
+- **Order Lookup:** `GET /api/orders`
+- **Return Validation:** `POST /api/returns`
+- **Connection:** Local Express server at `localhost:3000`
+
+**Screenshot Evidence:**
+
+<img width="2940" height="1648" alt="E606A1D1-21D7-410A-9A55-05E51B37445D" src="https://github.com/user-attachments/assets/c7f3baa9-4f71-4a37-a2ca-7455529ba75b" />
+
+
+### 2. Successful Return Request — HTTP 200
+
+A valid return request was submitted through the TigerSteps HTML form.
+
+The Express server successfully received and processed the request.
+
+- **Endpoint:** `POST /api/returns`
+- **Request Method:** POST
+- **HTTP Status:** 200 OK
+- **Response Content-Type:** application/json
+- **Result:** Approved
+
+This demonstrates that the frontend communicates with the backend through an HTTP POST request.
+
+**Screenshot Evidence:**
+
+<img width="1470" height="824" alt="09597056-7B83-4ED0-A3D2-5430C8BEA444" src="https://github.com/user-attachments/assets/20409ad5-f2ac-4dec-85d4-1df61eb925b3" />
+
+
+### 3. Backend JSON Response — Approved
+
+The backend returned the following JSON response after processing a valid return request:
+
+```json
+{
+  "success": true,
+  "status": "Approved",
+  "message": "The return request passed the Week 8 backend rules.",
+  "remainingEligibleQuantity": 2
+}
+```
+
+The frontend successfully displayed the approval message returned by the API.
+
+This demonstrates that the application can receive and display structured JSON responses from the backend.
+
+**Screenshot Evidence:**
+
+<img width="1470" height="824" alt="EE5E0292-9B98-40F3-BBD7-B283F669B014" src="https://github.com/user-attachments/assets/afb62e7b-ac12-44d5-8b08-4a63f0865c3f" />
+
+
+
+### 4. Invalid Order Lookup — HTTP 404
+
+An order lookup was performed using customer and order information that did not match an existing purchase record.
+
+The server returned an HTTP 404 response, and the frontend displayed:
+
+**"No matching order was found."**
+
+- **Endpoint:** `GET /api/orders`
+- **HTTP Status:** 404 Not Found
+- **Result:** No matching order found
+
+This demonstrates that the order lookup API handles unsuccessful requests and displays appropriate feedback.
+
+**Screenshot Evidence:**
+
+<img width="1470" height="824" alt="C6D718CF-09B5-42E1-A185-EA615CCD7211" src="https://github.com/user-attachments/assets/05d0dae6-8f70-4222-944b-fccff679d6e5" />
+
+
+### 5. Rejected Return Request — HTTP 400
+
+A separate invalid return request should be submitted to verify that the backend independently enforces the TigerSteps business rules.
+
+The expected behavior is:
+
+- **Endpoint:** `POST /api/returns`
+- **Expected HTTP Status:** 400 Bad Request
+- **Expected Result:** Rejected
+- **Validation:** Existing Week 8 business rules
+
+**Screenshot Evidence:**
+
+[Insert Rejected Return screenshot after completing this test]
+
+### Testing Summary
+
+The completed tests demonstrate successful frontend-to-backend communication through the local Express API.
+
+The evidence confirms:
+
+- The frontend successfully loads and communicates with the Express server.
+- Order lookup requests are processed through the API.
+- Valid return requests receive an HTTP 200 response.
+- The backend returns structured JSON containing the approval decision.
+- The frontend displays the backend's approval message.
+- Invalid order lookups receive an HTTP 404 response.
+
+A rejected `POST /api/returns` test is still needed to document HTTP 400 validation behavior. The six expected-versus-actual test results should also be recorded separately to complete the Week 9 testing documentation.
+
 ## Conclusion
 
-The objective of Week 9 is to demonstrate that the existing TigerSteps frontend, local Express server, and backend business rules communicate correctly through HTTP and JSON.
+The Week 9 TigerSteps checkpoint demonstrates the integration of our existing HTML, CSS, and JavaScript frontend with a local Node.js/Express API.
 
-The application should allow users to submit return requests, receive backend validation results, and view clear approval, rejection, or connection-error messages without requiring cloud deployment or database storage.
+The application successfully sends return requests through HTTP POST, processes them using the existing Week 8 backend business rules, and displays the resulting approval messages.
+
+Chrome DevTools provides evidence of successful API communication, HTTP status codes, and structured JSON responses.
+
+This checkpoint establishes the foundation for future cloud integration and database functionality while preserving the frontend design and business logic developed during previous weeks.
