@@ -16,7 +16,7 @@ The existing frontend design, order lookup functionality, and business rules rem
 - `app_logic_final.js`: Frontend JavaScript responsible for order lookup, form validation, eligibility previews, and backend communication.
 - `backend/backend.js`: Week 8 backend containing the `processReturnRequest()` function.
 - `backend/test-backend.js`: Six backend test cases covering valid, invalid, and boundary scenarios.
-- `server/server.js`: Local Express server responsible for receiving JSON requests and passing them to the backend.
+- `backend/server.js`: Local Express server responsible for receiving JSON requests and passing them to the backend.
 - `package.json`: Project dependencies and available Node.js commands.
 
 ## Backend Business Rules
@@ -52,7 +52,7 @@ npm start
 If an npm start script is not configured, use:
 
 ```bash
-node server/server.js
+node backend/server.js
 ```
 
 ### 3. Open the Website
