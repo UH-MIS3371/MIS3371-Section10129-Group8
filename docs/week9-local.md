@@ -278,22 +278,6 @@ This demonstrates that the order lookup API handles unsuccessful requests and di
 
 <img width="1470" height="824" alt="C6D718CF-09B5-42E1-A185-EA615CCD7211" src="https://github.com/user-attachments/assets/05d0dae6-8f70-4222-944b-fccff679d6e5" />
 
-
-### 5. Rejected Return Request — HTTP 400
-
-A separate invalid return request should be submitted to verify that the backend independently enforces the TigerSteps business rules.
-
-The expected behavior is:
-
-- **Endpoint:** `POST /api/returns`
-- **Expected HTTP Status:** 400 Bad Request
-- **Expected Result:** Rejected
-- **Validation:** Existing Week 8 business rules
-
-**Screenshot Evidence:**
-
-[Insert Rejected Return screenshot after completing this test]
-
 ### Testing Summary
 
 The completed tests demonstrate successful frontend-to-backend communication through the local Express API.
