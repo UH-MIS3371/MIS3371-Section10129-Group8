@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Helps the page display properly on different screen sizes -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="tigerstep-style.css">
+  <script src="app_logic.js" defer></script>
+
+  <!-- Appears in the browser tab -->
+  <title>Return Request</title>
+</head>
+
+<body>
+  <!-- introductory area of the page. It communicates the purpose of the page.-->
+  <header>
+    <h1>TigerSteps Product Return Request</h1>
+    <p>Submit one return request for your shoes order</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Before You Submit</h2>
+      <p>Please have your Customer ID, phone number, email address, and receipt information ready.</p>
+    </section>
+
+    <section>
+      <h2>Return Details</h2>
+      <!--groups the controls that participate in one submission.-->
+      <form id="returnForm" method="get">
+        <fieldset>
+          <legend>Return Details</legend>
+          <label for="CustomerID">Customer ID</label>
+          <input id="CustomerID" name="CustomerID" type="text" maxlength="12" required>
+
+          <label for="custPhone">Phone Number</label>
+          <input id="custPhone" name="custPhone" type="tel" placeholder="713-555-0123"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="12" required>
+
+          <label for="custEmail">Email Address</label>
+          <input id="custEmail" name="custEmail" type="email" placeholder="name@example.com" required>
+
+          <label for="orderID">Order ID</label>
+          <input id="orderID" name="orderID" maxlength="12" type="text" required>
+
+          <label for="itemSKU">Item Being Returned</label>
+          <!-- The value of each option is the item code.
+               app_logic.js uses that code to check Business Rule BR-4. -->
+          <select id="itemSKU" name="itemSKU" required>
+            <option value="">-- Select the item you are returning --</option>
+            <option value="TS-1001">TS-1001 - Runner (Black)</option>
+            <option value="TS-1002">TS-1002 - Trail Boot (Brown)</option>
+            <option value="TS-1003">TS-1003 - Campus Low (White)</option>
+            <option value="TS-2001">TS-2001 - Court Classic (FINAL SALE)</option>
+            <option value="TS-2002">TS-2002 - Summer Slide (FINAL SALE)</option>
+            <option value="TS-3001">TS-3001 - Retro Trainer (Clearance Price)</option>
+          </select>
+
+          <label for="dayDelivered">Day Delivered</label>
+          <input id="dayDelivered" name="dayDelivered" type="date" required>
+
+          <label for="description">Reason for Return/Descprition</label>
+
+          <textarea id="description" name="description" rows="4" cols="45" maxlength="250" required></textarea>
+
+          <input id="receiptAttached" name="receiptAttached" type="checkbox" value="yes" aria-describedby="receiptHelp">
+          <label for="receiptAttached"> Receipt attached </label>
+          <p id="receiptHelp">Check this box if you include the original receipt with your return</p>
+
+        </fieldset>
+
+        <button type="submit">Submit Request</button>
+
+        <!-- app_logic.js writes the Approved / Rejected decision here
+             with textContent after the form is submitted. -->
+        <p id="returnMessage" class="return-message"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>MIS3371 - TigerSteps Store</p>
+  </footer>
+
+</body>
+
+</html>
