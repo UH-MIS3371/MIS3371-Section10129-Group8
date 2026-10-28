@@ -3,13 +3,6 @@
 // If the item is marked "FINAL SALE" or was purchased at a clearance
 // price, the request is Rejected.
 
-
-// ============================================================
-// PART 1 - SESSION 1: the rule by itself
-// These are the values and the function we wrote first.
-// Session 2 reuses this function instead of writing the rule again.
-// ============================================================
-
 // Item codes that are marked FINAL SALE.
 const FINAL_SALE_ITEMS = ['TS-2001', 'TS-2002'];
 
@@ -33,13 +26,9 @@ function returnMessageFor(itemCode) {
 }
 
 
-// ============================================================
-// PART 2 - SESSION 2: connect the rule to the page
-// ============================================================
-
 // Select the relevant HTML elements using querySelector.
 const returnForm = document.querySelector('#returnForm');
-const itemInput = document.querySelector('#itemSKU');
+const itemInput = document.querySelector('#sku');
 const messageOutput = document.querySelector('#returnMessage');
 
 // Runs when the customer submits the return request.

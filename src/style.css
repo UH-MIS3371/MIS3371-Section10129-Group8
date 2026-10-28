@@ -1,0 +1,958 @@
+/* ============================================================
+   TigerSteps - stylesheet
+   Matches the Figma file "TigerSteps Return Form".
+   Jungle greens with warm tiger-gold accents.
+   ============================================================ */
+
+:root {
+    /* Jungle greens */
+    --jungle-darkest: #0f2318;
+    --jungle-dark: #16321f;
+    --jungle: #1e4530;
+    --moss: #4a7c59;
+    --fern: #7aa98a;
+
+    /* Tiger gold */
+    --gold: #d9a441;
+    --gold-soft: #e9c270;
+    --gold-deep: #b5832c;
+    --gold-tint: #f6ecd4;
+
+    /* Paper tones for cards */
+    --paper: #faf6ec;
+    --paper-soft: #f3ecdd;
+    --white: #ffffff;
+    --ink: #22302a;
+    --ink-soft: #5f6f66;
+    --line: #ded3bd;
+
+    /* Status colours */
+    --ok-bg: #e4efe3;
+    --ok-text: #2f5c38;
+    --ok-line: #a8c9ac;
+    --no-bg: #f7e5dc;
+    --no-text: #8d4428;
+    --no-line: #e0b8a3;
+
+    /* Radius and spacing (same names as the Figma variables) */
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-full: 999px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+
+    --shadow-card: 0 18px 44px rgba(8, 26, 16, 0.35);
+    --shadow-gold: 0 4px 12px rgba(181, 131, 44, 0.35);
+    --focus-ring: 0 0 0 4px rgba(217, 164, 65, 0.28);
+
+    --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- Base ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    min-height: 100vh;
+    background: linear-gradient(90deg, var(--jungle-darkest) 0%, var(--jungle-dark) 55%, var(--jungle) 100%);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+p {
+    margin: 0;
+}
+
+a {
+    color: inherit;
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 80px;
+    background: var(--jungle-darkest);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    background: var(--gold);
+    color: var(--jungle-darkest);
+    font-size: 16px;
+}
+
+.topnav {
+    display: flex;
+    gap: 28px;
+}
+
+.topnav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fern);
+    text-decoration: none;
+}
+
+.topnav a:hover,
+.topnav a[aria-current="page"] {
+    color: var(--gold-soft);
+    font-weight: 600;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+    padding: 52px 80px 44px;
+}
+
+.eyebrow {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.hero h1 {
+    margin-bottom: 12px;
+    font-size: 44px;
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--white);
+}
+
+.hero-text {
+    max-width: 620px;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--fern);
+}
+
+/* Short gold line under the hero text */
+.hero::after {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 4px;
+    margin-top: 12px;
+    border-radius: 2px;
+    background: var(--gold);
+}
+
+/* ---------- Page layout ---------- */
+
+/* Desktop: form on the left, status and policy on the right */
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-areas:
+        "form status"
+        "form policy";
+    grid-template-rows: auto 1fr;
+    gap: 20px 28px;
+    align-items: start;
+    max-width: 1440px;
+    padding: 0 80px 72px;
+}
+
+.form-card {
+    grid-area: form;
+}
+
+.status-card {
+    grid-area: status;
+}
+
+.policy-card {
+    grid-area: policy;
+}
+
+.card {
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+}
+
+.card-title {
+    margin-bottom: 18px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+/* ---------- Form card ---------- */
+
+.form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 36px;
+    box-shadow: var(--shadow-card);
+}
+
+/* Each step is a fieldset with a gold divider between steps */
+.step {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.step+.step {
+    padding-top: 30px;
+    border-top: 1px solid var(--gold);
+}
+
+/* Number badge + title + description */
+.step-header {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    column-gap: 14px;
+    float: left;
+    width: 100%;
+    padding: 0;
+}
+
+.step-header+* {
+    clear: both;
+}
+
+.step-badge {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-full);
+    background: var(--jungle);
+    color: var(--gold-soft);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--ink);
+}
+
+.step-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+}
+
+/* ---------- Fields ---------- */
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.field-row-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-width: 0;
+}
+
+label,
+.field-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+input,
+select,
+textarea,
+button {
+    font: inherit;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+input[type="email"],
+select,
+textarea,
+.readonly-box {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background-color: var(--white);
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.75;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--gold-soft);
+}
+
+/* Focus state from Figma: gold border + soft gold ring */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border: 2px solid var(--gold);
+    padding: 10px 13px;
+    box-shadow: var(--focus-ring);
+}
+
+/* Drop-downs use a custom chevron */
+select {
+    appearance: none;
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%235f6f66' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+}
+
+textarea {
+    min-height: 112px;
+    resize: vertical;
+}
+
+/* Read-only fields come from the order record, so they look locked */
+input[readonly],
+.readonly-box {
+    background-color: var(--paper-soft);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none'%3E%3Crect x='5' y='11' width='14' height='10' rx='2' stroke='%234a7c59' stroke-width='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4' stroke='%234a7c59' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+    cursor: default;
+}
+
+input[readonly]:hover {
+    border-color: var(--line);
+}
+
+input[readonly]:focus {
+    border: 1px solid var(--line);
+    padding: 11px 40px 11px 14px;
+    box-shadow: none;
+}
+
+/* Error state (set by the browser or by app.js with aria-invalid) */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"],
+input:user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+    border: 2px solid var(--no-text);
+    padding: 10px 13px;
+}
+
+.field-help {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+}
+
+.field-help:empty {
+    display: none;
+}
+
+/* ---------- Refund method radio cards ---------- */
+
+.radio-group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.radio-group legend {
+    margin-bottom: var(--space-sm);
+    padding: 0;
+}
+
+.radio-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.radio-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.radio-card:hover {
+    border-color: var(--gold-soft);
+}
+
+/* Selected card turns gold */
+.radio-card:has(input:checked) {
+    border: 2px solid var(--gold);
+    padding: 13px 15px;
+    background: var(--gold-tint);
+}
+
+.radio-card:has(input:focus-visible) {
+    box-shadow: var(--focus-ring);
+}
+
+.radio-card input {
+    width: 20px;
+    height: 20px;
+    margin: 1px 0 0;
+    accent-color: var(--gold-deep);
+    flex-shrink: 0;
+}
+
+.radio-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.radio-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.radio-card-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-soft);
+}
+
+/* ---------- Receipt checkbox ---------- */
+
+.check-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.check-row input {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: var(--moss);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.check-row label {
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.check-row .field-help {
+    font-size: 13px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    min-height: 48px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease, filter 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover {
+    filter: brightness(1.06);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: none;
+    transform: none;
+}
+
+.btn-primary {
+    background: var(--gold);
+    color: var(--jungle-darkest);
+    box-shadow: var(--shadow-gold);
+}
+
+/* "Find my order" (gold with a moss border in the Figma file) */
+.btn-find {
+    background: var(--gold);
+    color: var(--jungle-darkest);
+    border: 1.5px solid var(--moss);
+    box-shadow: var(--shadow-gold);
+}
+
+.btn-secondary {
+    background: var(--white);
+    color: var(--jungle);
+    border: 1.5px solid var(--moss);
+}
+
+.lookup-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+
+/* "Order found" pill, hidden until app.js writes text into it */
+.lookup-message {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: var(--radius-full);
+    background: var(--ok-bg);
+    color: var(--ok-text);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.lookup-message::before {
+    content: "✓";
+}
+
+.lookup-message:empty {
+    display: none;
+}
+
+/* Add the class is-error in app.js when no order is found */
+.lookup-message.is-error {
+    background: var(--no-bg);
+    color: var(--no-text);
+}
+
+.lookup-message.is-error::before {
+    content: "✕";
+}
+
+.submit-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-top: 6px;
+}
+
+.submit-row .btn {
+    flex-shrink: 0;
+}
+
+.submit-note {
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+.form-errors {
+    padding: 14px 18px;
+    border: 1px solid var(--no-line);
+    border-radius: var(--radius-md);
+    background: var(--no-bg);
+    color: var(--no-text);
+    font-weight: 500;
+}
+
+/* ---------- Locked steps (dynamic) ----------
+   app.js adds the class is-locked to a step until the step before it is done.
+   Example: document.querySelector('#stepItem').classList.add('is-locked'); */
+
+.locked-note {
+    display: none;
+}
+
+.step.is-locked> :not(legend):not(.locked-note) {
+    display: none;
+}
+
+.step.is-locked .step-header {
+    opacity: 0.45;
+}
+
+.step.is-locked .locked-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 8px 12px;
+    border-radius: var(--radius-full);
+    background: var(--paper-soft);
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.step.is-locked .locked-note::before {
+    content: "";
+    width: 15px;
+    height: 15px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none'%3E%3Crect x='5' y='11' width='14' height='10' rx='2' stroke='%235f6f66' stroke-width='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4' stroke='%235f6f66' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
+}
+
+/* Smooth reveal when a step unlocks */
+.step:not(.is-locked)> :not(legend) {
+    animation: reveal 0.3s ease-out;
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------- Request status card ---------- */
+
+.status-card {
+    padding: 26px;
+}
+
+.status-steps {
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.status-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 26px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+/* Space for the line between dots */
+.status-step+.status-step {
+    margin-top: 18px;
+}
+
+/* Dot */
+.status-step::before {
+    content: "";
+    box-sizing: border-box;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    border: 2px solid var(--line);
+    border-radius: var(--radius-full);
+    background: var(--white) no-repeat center;
+}
+
+/* Line connecting a step to the one above it */
+.status-step+.status-step::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    bottom: 100%;
+    width: 2px;
+    height: 18px;
+    background: var(--line);
+}
+
+.status-step.is-done,
+.status-step.is-current,
+.status-step.is-rejected {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.status-step.is-done::before {
+    border: 0;
+    background-color: var(--moss);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.status-step.is-done+.status-step::after {
+    background: var(--moss);
+}
+
+.status-step.is-current::before {
+    border: 0;
+    background-color: var(--gold);
+    background-image: radial-gradient(circle, var(--jungle-darkest) 0 4px, transparent 4.5px);
+    box-shadow: 0 0 0 5px rgba(217, 164, 65, 0.3);
+}
+
+.status-step.is-rejected::before {
+    border: 0;
+    background-color: var(--no-text);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 6l12 12M18 6 6 18' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* Decision message. app.js sets one of these classes:
+   return-message, return-message decision-approved, return-message decision-rejected */
+.return-message {
+    display: flex;
+    gap: 12px;
+    padding: 16px 18px;
+    border: 1px solid var(--gold-soft);
+    border-radius: var(--radius-md);
+    background: var(--gold-tint);
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.return-message::before {
+    content: "i";
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border: 2px solid var(--gold-deep);
+    border-radius: var(--radius-full);
+    color: var(--gold-deep);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.return-message.decision-approved {
+    border-color: var(--ok-line);
+    background: var(--ok-bg);
+    color: var(--ok-text);
+    font-weight: 500;
+}
+
+.return-message.decision-approved::before {
+    content: "✓";
+    border-color: var(--ok-text);
+    color: var(--ok-text);
+}
+
+.return-message.decision-rejected {
+    border-color: var(--no-line);
+    background: var(--no-bg);
+    color: var(--no-text);
+    font-weight: 500;
+}
+
+.return-message.decision-rejected::before {
+    content: "✕";
+    border-color: var(--no-text);
+    color: var(--no-text);
+}
+
+.return-message:empty {
+    display: none;
+}
+
+/* ---------- Policy card ---------- */
+
+.policy-card {
+    padding: 26px;
+    background: var(--jungle);
+}
+
+.policy-card .card-title {
+    color: var(--gold-soft);
+}
+
+.policy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.policy-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--gold-tint);
+}
+
+.policy-list li::before {
+    content: "✓";
+    color: var(--gold);
+    font-weight: 700;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+    padding: 22px 16px;
+    background: var(--jungle-darkest);
+    text-align: center;
+    font-size: 13px;
+    color: var(--fern);
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1100px) {
+
+    .topbar,
+    .hero {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .layout {
+        grid-template-columns: minmax(0, 1fr) 320px;
+        padding: 0 40px 56px;
+    }
+}
+
+/* ---------- Mobile (matches the 390px Figma screens) ---------- */
+
+@media (max-width: 760px) {
+    .topbar {
+        padding: 16px 20px;
+    }
+
+    .topnav {
+        gap: 16px;
+    }
+
+    .hero {
+        padding: 32px 20px 28px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero-text {
+        font-size: 15px;
+    }
+
+    /* One column: status first, then the form, then the policy */
+    .layout {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "status"
+            "form"
+            "policy";
+        grid-template-rows: auto;
+        gap: 16px;
+        padding: 0 16px 40px;
+    }
+
+    .form-card {
+        padding: 24px 20px;
+        gap: 26px;
+    }
+
+    .status-card,
+    .policy-card {
+        padding: 20px;
+    }
+
+    /* Fields that sit side by side now stack */
+    .field-row,
+    .field-row-3,
+    .radio-cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .radio-cards {
+        gap: 10px;
+    }
+
+    .lookup-row,
+    .submit-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .lookup-row .lookup-message {
+        align-self: flex-start;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Respect users who turn off animations */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

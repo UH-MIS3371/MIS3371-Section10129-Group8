@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Helps the page display properly on different screen sizes -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Inter is the font used in the Figma design -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+
+  <!-- Appears in the browser tab -->
+  <title>Start a Return | TigerSteps</title>
+</head>
+
+<body>
+  <!-- Top bar with the store name and links -->
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true">T</span>
+      TigerSteps
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="#">Shop</a>
+      <a href="#" aria-current="page">Returns</a>
+      <a href="#">Help</a>
+    </nav>
+  </header>
+
+  <!-- Page title area -->
+  <section class="hero">
+    <p class="eyebrow">Online returns</p>
+    <h1>Start a return</h1>
+    <p class="hero-text">Submit one return request for a previous TigerSteps order. Our return rules check it right
+      away and show you the decision.</p>
+    <noscript>
+      <p class="hero-text">Enable JavaScript to check return eligibility on this page.</p>
+    </noscript>
+  </section>
+
+  <main class="layout">
+
+    <!-- Request status: shows where the request is (BR-7) and the decision -->
+    <aside class="card status-card" aria-labelledby="statusHeading">
+      <h2 id="statusHeading" class="card-title">Request status</h2>
+
+      <!-- app.js can add is-done / is-current / is-rejected to each step -->
+      <ol id="returnState" class="status-steps">
+        <li class="status-step is-current">Draft</li>
+        <li class="status-step">Submitted</li>
+        <li class="status-step">Decision</li>
+      </ol>
+
+      <!-- app.js writes the Approved / Rejected decision here.
+           Classes: return-message, decision-approved, decision-rejected -->
+      <p id="returnMessage" class="return-message" role="status" aria-live="polite">
+        Enter your Customer ID and Order ID to begin.
+      </p>
+    </aside>
+
+    <!-- The return request form, split into 4 steps -->
+    <form id="returnForm" class="card form-card" method="post">
+
+      <!-- Step 1 -->
+      <fieldset class="step" id="stepOrder">
+        <legend class="step-header">
+          <span class="step-badge" aria-hidden="true">1</span>
+          <span class="step-title">Find your order</span>
+          <span class="step-desc">Enter the IDs from your order confirmation email.</span>
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="customerId">Customer ID</label>
+            <input id="customerId" name="customerId" type="text" maxlength="12" placeholder="e.g. C1001"
+              autocomplete="off" required>
+          </div>
+          <div class="field">
+            <label for="orderId">Order ID</label>
+            <input id="orderId" name="orderId" type="text" maxlength="12" placeholder="e.g. ORD-1001"
+              autocomplete="off" required>
+          </div>
+        </div>
+
+        <div class="lookup-row">
+          <button id="findOrderButton" class="btn btn-find" type="button">Find my order</button>
+          <!-- Shows "Order found" after lookup. Hidden while empty. -->
+          <p id="lookupMessage" class="lookup-message" role="status" aria-live="polite"></p>
+        </div>
+      </fieldset>
+
+      <!-- Step 2 -->
+      <fieldset class="step" id="stepItem">
+        <legend class="step-header">
+          <span class="step-badge" aria-hidden="true">2</span>
+          <span class="step-title">Choose the item</span>
+          <span class="step-desc">Only items from this order are listed. Order details fill in automatically.</span>
+        </legend>
+        <!-- Shown only when the step has the is-locked class -->
+        <p class="locked-note">Unlocks after we find your order</p>
+
+        <div class="field">
+          <label for="sku">Item being returned</label>
+          <!-- The value of each option is the item code.
+               app.js matches that code to an order record for BR-2. -->
+          <select id="sku" name="sku" required>
+            <option value="">Select an item from this order</option>
+            <option value="TS-1001">TS-1001 · Runner (Black)</option>
+            <option value="TS-1002">TS-1002 · Trail Boot (Brown)</option>
+            <option value="TS-1003">TS-1003 · Campus Low (White)</option>
+            <option value="TS-2001">TS-2001 · Court Classic (FINAL SALE)</option>
+            <option value="TS-2002">TS-2002 · Summer Slide (FINAL SALE)</option>
+            <option value="TS-3001">TS-3001 · Retro Trainer (Clearance Price)</option>
+          </select>
+        </div>
+
+        <div class="field-row field-row-3">
+          <div class="field">
+            <label for="quantityPurchased">Quantity purchased</label>
+            <!-- Read only. Filled from the order record, never typed by the customer. -->
+            <input id="quantityPurchased" name="quantityPurchased" type="number" min="1" step="1" readonly
+              placeholder="—">
+          </div>
+          <div class="field">
+            <label for="deliveryDate">Delivery date</label>
+            <!-- Read only. BR-1 counts days from this date, so the customer cannot set it. -->
+            <input id="deliveryDate" name="deliveryDate" type="date" readonly>
+          </div>
+          <div class="field">
+            <span class="field-label">Still eligible</span>
+            <!-- Shows previously returned and remaining eligible quantity -->
+            <p id="orderSummary" class="readonly-box" aria-live="polite">—</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Step 3 -->
+      <fieldset class="step" id="stepDetails">
+        <legend class="step-header">
+          <span class="step-badge" aria-hidden="true">3</span>
+          <span class="step-title">Return details</span>
+          <span class="step-desc">Tell us about the item and how you want your refund.</span>
+        </legend>
+        <p class="locked-note">Unlocks after you choose an item</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="returnQuantity">Quantity to return</label>
+            <input id="returnQuantity" name="returnQuantity" type="number" min="1" step="1" required
+              aria-describedby="quantityMessage">
+            <p id="quantityMessage" class="field-help" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="reportedCondition">Item condition</label>
+            <select id="reportedCondition" name="reportedCondition" required>
+              <option value="">Select the item condition</option>
+              <option value="unworn">Unworn</option>
+              <option value="worn">Worn</option>
+              <option value="damaged">Damaged or defective</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Radio cards replace the old drop-down. JavaScript can read the choice with
+             returnForm.elements.preferredRefundMethod.value -->
+        <fieldset id="preferredRefundMethod" class="field radio-group">
+          <legend class="field-label">Preferred refund method</legend>
+          <div class="radio-cards">
+            <label class="radio-card">
+              <input type="radio" name="preferredRefundMethod" value="original-payment" required>
+              <span class="radio-card-text">
+                <span class="radio-card-title">Original payment</span>
+                <span class="radio-card-desc">Back to the card you paid with</span>
+              </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="preferredRefundMethod" value="store-credit">
+              <span class="radio-card-text">
+                <span class="radio-card-title">Store credit</span>
+                <span class="radio-card-desc">Use it on your next TigerSteps order</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="reason">Reason for return</label>
+          <textarea id="reason" name="reason" rows="4" maxlength="250" required
+            placeholder="Tell us why you are returning this item."></textarea>
+        </div>
+
+        <div class="check-row">
+          <input id="receiptAvailable" name="receiptAvailable" type="checkbox" value="yes"
+            aria-describedby="receiptHelp">
+          <div>
+            <label for="receiptAvailable">I have a receipt or order confirmation (optional)</label>
+            <p id="receiptHelp" class="field-help">No upload needed. This does not change the decision.</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Step 4 -->
+      <fieldset class="step" id="stepContact">
+        <legend class="step-header">
+          <span class="step-badge" aria-hidden="true">4</span>
+          <span class="step-title">Contact info (optional)</span>
+          <span class="step-desc">Only used if we need to reach you about this return.</span>
+        </legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" placeholder="713-555-0123" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              maxlength="12">
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="name@example.com">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Missing or malformed input is a validation message, not a rule rejection. -->
+      <p id="formErrors" class="form-errors" role="alert" aria-live="assertive" hidden></p>
+
+      <div class="submit-row">
+        <button class="btn btn-primary" type="submit">
+          Check return eligibility
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <p class="submit-note">We check your request against the TigerSteps return rules and show the result in
+          Request status.</p>
+      </div>
+    </form>
+
+    <!-- Short version of the return rules -->
+    <aside class="card policy-card" aria-labelledby="policyHeading">
+      <h2 id="policyHeading" class="card-title">Before you submit</h2>
+      <ul class="policy-list">
+        <li>Returns are accepted up to 60 days after delivery.</li>
+        <li>Final sale and clearance items cannot be returned.</li>
+        <li>Return only the units you have not returned before.</li>
+        <li>One active request per order item.</li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIS 3371 · TigerSteps Store · Fictional data only</p>
+  </footer>
+
+</body>
+
+</html>
