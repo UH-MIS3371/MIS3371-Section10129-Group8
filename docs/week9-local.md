@@ -1,176 +1,130 @@
+# TigerSteps: Week 9 Local API Checkpoint
 
-# Week 9 — TigerSteps Local Frontend, Backend, and API Checkpoint
+## 1. What Week 9 Adds
 
-## Required Result
+The existing return form now talks to the Week 8 backend over HTTP and JSON through a local Express server. The business rules did not change and did not move: `backend/backend.js` still decides every request.
 
-Continue developing our existing **TigerSteps Product Return Request System** by connecting the completed HTML, CSS, and JavaScript frontend to our local Node.js/Express backend using HTTP POST and JSON.
+The browser no longer holds any order records or rule logic. It asks the server for the customer's order, sends the return request, and shows the decision that comes back.
 
-The existing frontend design, order lookup functionality, and business rules remain intact. The Express server communicates with our Week 8 backend logic to validate return requests and return an Approved or Rejected response.
+No AWS, no database. Nothing is saved (`persisted: false`).
 
-**No AWS deployment or database integration is required for Week 9.**
+## 2. Files
 
-## Project Files
-
-- `TigerStep_Return_Form.html`: Existing return request form containing customer information, order lookup, item selection, return quantity, condition, and refund preferences.
-- `tigerstep-style.css`: Existing CSS stylesheet responsible for the TigerSteps website design.
-- `app_logic_final.js`: Frontend JavaScript responsible for order lookup, form validation, eligibility previews, and backend communication.
-- `backend/backend.js`: Week 8 backend containing the `processReturnRequest()` function.
-- `backend/test-backend.js`: Six backend test cases covering valid, invalid, and boundary scenarios.
-- `backend/server.js`: Local Express server responsible for receiving JSON requests and passing them to the backend.
-- `package.json`: Project dependencies and available Node.js commands.
-
-## Backend Business Rules
-
-The existing TigerSteps backend implements three primary business rules:
-
-- **BR-1 — Return Window:** Returns must be submitted within 60 days of the verified delivery date.
-- **BR-2 — Purchase Verification:** Customer ID, Order ID, and item SKU must match an existing purchase record.
-- **BR-3 — Return Quantity:** The requested return quantity cannot exceed the remaining eligible quantity purchased.
-
-Additional business rules will be implemented in future backend development.
-
-## How to Run
-
-### 1. Install Dependencies
-
-Open the TigerSteps repository in Visual Studio Code.
-
-From the repository root, run:
-
-```bash
-npm install
-```
-
-### 2. Start the Server
-
-Run:
-
-```bash
-npm start
-```
-
-If an npm start script is not configured, use:
-
-```bash
-node backend/server.js
-```
-
-### 3. Open the Website
-
-Once the server is running, open:
-
-http://localhost:3000/
-
-The TigerSteps return request form should appear with its existing styling and functionality.
-
-### 4. Submit a Return Request
-
-1. Enter a valid Customer ID and Order ID.
-2. Click **Find My Order** to retrieve the fictional purchase information.
-3. Select the item being returned.
-4. Enter the return quantity, item condition, preferred refund method, and reason for return.
-5. Click **Check Return Eligibility**.
-6. Review the Approved or Rejected response returned by the backend.
-
-The frontend sends the request to the Express server using `fetch()` with HTTP POST and JSON.
-
-To stop the server, press **Control+C** in the terminal.
-
-## Backend Testing
-
-The existing backend tests can be executed independently of the HTML frontend.
-
-From the repository root, run:
-
-```bash
-node backend/test-backend.js
-```
-
-### Six Backend Test Cases
-
-| Test | Scenario | Expected Result |
-|---|---|---|
-| 1 | Regular item returned after 59 days | Approved |
-| 2 | Second purchased SKU on the same verified order | Approved |
-| 3 | Customer ID does not match the purchase record | Rejected — BR-2 |
-| 4 | Return quantity exceeds purchased quantity | Rejected — BR-3 |
-| 5 | Return submitted exactly 60 days after delivery | Approved |
-| 6 | Return submitted 61 days after delivery | Rejected — BR-1 |
-
-These tests verify that the backend independently enforces the existing TigerSteps business rules.
-
-**Note:** Actual PASS/FAIL results should be documented after executing the tests.
-
-## API Integration and Validation
-
-The frontend communicates with the Express server through an HTTP POST request containing JSON.
-
-### Required JSON Fields
-
-The return request includes:
-
-- `customerId`
-- `orderId`
-- `sku`
-- `returnQuantity`
-- `reason`
-- `reportedCondition`
-- `preferredRefundMethod`
-
-### Expected API Responses
-
-| Response | Meaning |
+| Path | Role |
 |---|---|
-| HTTP 200 | Return request passes backend validation |
-| HTTP 400 | Return request fails backend validation |
-| Connection error | Local server cannot be reached |
+| `src/index.html` | The one return form (unchanged) |
+| `src/style.css` | Stylesheet (unchanged) |
+| `src/app.js` | Calls `GET /api/orders` and `POST /api/returns`, shows feedback. No rules, no order data |
+| `backend/backend.js` | Week 8 rules BR-1 to BR-7, reused as is |
+| `server/server.js` | Express: serves `src/`, routes HTTP to `findOrderItems()` and `processReturnRequest()`. No rules |
+| `server/test-api.js` | HTTP tests that send JSON straight to the server, skipping the form |
+| `package.json` | `npm start`, `npm run test:backend`, `npm run test:api` |
 
-Backend validation operates independently of frontend validation.
+## 3. How to Run
 
-Even if someone bypasses the HTML form and sends JSON directly to the API, the backend must enforce the existing business rules.
+From the repository root:
 
-**Important:** An Approved result indicates successful local validation only. It does not mean a return has been permanently saved or that a refund has been processed.
+```bash
+npm install        # once, installs Express
+npm start          # starts the server
+```
 
-## Week 9 Submission Evidence / Checkpoint Review (4 Points)
+Open http://localhost:3000 (not `file://`). Press Control+C in the terminal to stop the server.
 
-The following requirements are based on the Week 9 grading criteria.
+Try these fictional orders:
 
-### 1. Server and JSON — 0.75 Points
+| Customer / Order / Item | What happens |
+|---|---|
+| C1001 / ORD-1001 / TS-1001, qty 1 | Approved. Submit again: Rejected BR-5 |
+| C1003 / ORD-1003 / TS-2001 | Item shows "cannot be returned". Submit: Rejected BR-4 |
+| C1008 / ORD-1008 / TS-1003 | Day 60 after delivery. Approved |
+| C1002 / ORD-1002 / TS-1003 | Day 61 after delivery. Rejected BR-1 |
 
-- Working local Express server.
-- HTTP POST endpoint accepts JSON requests.
-- Server returns structured JSON responses.
+## 4. API
 
-### 2. Backend Reuse — 0.75 Points
+### `GET /api/orders?customerId=...&orderId=...`
 
-- Existing Week 8 `processReturnRequest()` function is reused.
-- Business rules are not unnecessarily duplicated in the server.
+Returns the items on that order with safe fields only: `sku`, `name`, `quantityPurchased`, `quantityPreviouslyReturned`, `remainingEligibleQuantity`, `deliveryDate`, `returnable`, `returnableMessage`. The raw `finalSale` and `clearance` flags never leave the server. `returnable` is a BR-4 preview for the form; the decision still happens on submit. No match gives 404.
 
-### 3. Frontend Integration — 1.00 Point
+### `POST /api/returns`
 
-- Existing TigerSteps HTML form communicates with the backend using `fetch()`.
-- Original CSS styling and functionality are preserved.
-- No unnecessary duplicate frontend is created.
+Request body (JSON): `customerId`, `orderId`, `sku`, `returnQuantity`, `reason`, `reportedCondition`, `preferredRefundMethod`. Any other field, such as `status`, `finalSale`, or `deliveryDate`, is ignored.
 
-### 4. User Feedback — 0.50 Points
+| HTTP status | Body | Meaning | What the form shows |
+|---|---|---|---|
+| 200 | `success: true, status: "Approved"` | Every rule passed | Approved message, status rail on Approved |
+| 400 | `success: false, status: "Rejected", rule, reasons` | Reached the backend, a business rule failed | Rejected with every failed rule |
+| 400 | `success: false, error: "Validation", problems` | Reached the backend, input missing or malformed | Field problems, status rail stays on Draft |
+| none | `fetch` throws | Server not running or not reachable | "Cannot reach the TigerSteps server." |
 
-- Approved messages display correctly.
-- Rejected messages display correctly.
-- Connection errors are handled.
+Both 400 cases follow the Week 9 pattern `res.status(result.success ? 200 : 400)`. The JSON body tells them apart.
 
-### 5. Testing and Documentation — 0.50 Points
+## 5. Bypassing the Form
 
-- Six meaningful test scenarios.
-- Expected and actual results documented.
-- Valid, invalid, and boundary conditions tested.
+The backend does not depend on the browser. This request claims a final-sale item is not final sale and is already approved. The form is never opened:
 
-### 6. Repository and Contributions — 0.50 Points
+```bash
+curl -i -X POST http://localhost:3000/api/returns \
+  -H "Content-Type: application/json" \
+  -d '{"customerId":"C1003","orderId":"ORD-1003","sku":"TS-2001","returnQuantity":1,"reason":"Does not fit","reportedCondition":"unworn","preferredRefundMethod":"store-credit","finalSale":false,"status":"Approved"}'
+```
 
-- Network request/response evidence.
-- Readable instructions for running the application.
-- Documented team member contributions.
+Actual response (2026-10-28):
 
-**Total: 4.00 Points**
+```text
+HTTP/1.1 400 Bad Request
+{"success":false,"status":"Rejected","rule":"BR-4","reasons":[{"rule":"BR-4","message":"Final-sale and clearance items cannot be returned."}], ... ,"persisted":false}
+```
+
+## 6. API Test Cases
+
+Run with `npm run test:api`. "Actual" is the real HTTP status and body from the running server.
+
+| # | Category | Input | Expected | Actual | Pass/Fail |
+|---|---|---|---|---|---|
+| 1 | Valid | GET /api/orders?customerId=C1004&orderId=ORD-1004 | 200, 2 items, no finalSale field | 200, 2 items, no finalSale field | PASS |
+| 2 | Valid | POST C1001 / ORD-1001 / TS-1001, qty 1 | 200 Approved | 200 Approved | PASS |
+| 3 | Invalid | POST the same item again | 400 Rejected BR-5 | 400 Rejected BR-5 | PASS |
+| 4 | Invalid | POST C1003 final-sale item with finalSale: false, status: "Approved" | 400 Rejected BR-4 | 400 Rejected BR-4 | PASS |
+| 5 | Invalid | GET /api/orders?customerId=C1002&orderId=ORD-1001 | 404 | 404 | PASS |
+| 6 | Boundary | POST C1008 / ORD-1008 / TS-1003, qty 2, day 60 | 200 Approved | 200 Approved | PASS |
+| 7 | Boundary | POST C1002 / ORD-1002 / TS-1003, qty 1, day 61 | 400 Rejected BR-1 | 400 Rejected BR-1 | PASS |
+| 8 | Validation | POST complete request with blank reason | 400 Validation | 400 Validation | PASS |
+| 9 | Validation | POST body "{not json" | 400 Validation | 400 Validation | PASS |
+
+Total: 9. Passed: 9. Failed: 0. The backend unit tests are in `docs/week8-backend-testing.md`.
+
+## 7. Checkpoint Review (4 Points)
+
+| Item | Points | Where |
+|---|---|---|
+| Server and JSON | 0.75 | `server/server.js`, section 4 |
+| Reuse Week 8 rules | 0.75 | Server calls `processReturnRequest()`; no rule in the server or in `src/app.js` |
+| Frontend fetch | 1.00 | `handleOrderLookup()` and `handleSubmit()` in `src/app.js` |
+| Feedback | 0.50 | Approved, Rejected, validation, and connection messages (section 4) |
+| Testing and docs | 0.50 | Section 6 and `docs/week8-backend-testing.md` |
+| Repository and contributions | 0.50 | Section 8 and commit history |
+
+## 8. Network Evidence
+
+Screenshots to capture in Chrome DevTools, Network tab, for this build:
+
+- [ ] `GET /api/orders` for C1001 / ORD-1001: status 200, response with safe fields only
+- [ ] `POST /api/returns` Approved: payload has the seven fields, status 200
+- [ ] `POST /api/returns` Rejected (same item again, BR-5): status 400
+- [ ] `POST /api/returns` with the server stopped: request failed, form shows the connection message
+
+### Earlier build (before 2026-10-28)
+
+These screenshots were taken from an earlier version whose response format was different. Kept for history.
+
+<img width="2940" height="1648" alt="E606A1D1-21D7-410A-9A55-05E51B37445D" src="https://github.com/user-attachments/assets/c7f3baa9-4f71-4a37-a2ca-7455529ba75b" />
+
+<img width="1470" height="824" alt="09597056-7B83-4ED0-A3D2-5430C8BEA444" src="https://github.com/user-attachments/assets/20409ad5-f2ac-4dec-85d4-1df61eb925b3" />
+
+<img width="1470" height="824" alt="EE5E0292-9B98-40F3-BBD7-B283F669B014" src="https://github.com/user-attachments/assets/afb62e7b-ac12-44d5-8b08-4a63f0865c3f" />
+
+<img width="1470" height="824" alt="C6D718CF-09B5-42E1-A185-EA615CCD7211" src="https://github.com/user-attachments/assets/05d0dae6-8f70-4222-944b-fccff679d6e5" />
 
 ## Team Contributions
 
@@ -185,120 +139,8 @@ Team members contributed to the development and integration of the TigerSteps ap
 
 Individual contributions should be documented in the team's GitHub repository and activity tracker.
 
-## Week 9 Scope
+## 9. Not in Week 9
 
-This checkpoint focuses on connecting the existing frontend and backend through a local Express API.
-
-### Not Required for Week 9
-
-- AWS Lambda or API Gateway deployment.
-- DynamoDB or other database integration.
-- Public website hosting.
-- Permanent return request storage.
-- Actual refund processing.
-
-Cloud integration and database persistence will be introduced in subsequent course checkpoints.
-
-## Week 9 API Testing Evidence
-
-The following screenshots document the integration of the TigerSteps frontend with our local Node.js/Express API. Testing was performed using Chrome DevTools to inspect HTTP requests, response status codes, and JSON responses.
-
-### 1. Frontend-to-Backend Network Connection
-
-The Chrome DevTools Network tab shows successful communication between the TigerSteps frontend and Express server.
-
-The application sends HTTP requests for order lookup and return eligibility validation.
-
-- **Order Lookup:** `GET /api/orders`
-- **Return Validation:** `POST /api/returns`
-- **Connection:** Local Express server at `localhost:3000`
-
-**Screenshot Evidence:**
-
-<img width="2940" height="1648" alt="E606A1D1-21D7-410A-9A55-05E51B37445D" src="https://github.com/user-attachments/assets/c7f3baa9-4f71-4a37-a2ca-7455529ba75b" />
-
-
-### 2. Successful Return Request — HTTP 200
-
-A valid return request was submitted through the TigerSteps HTML form.
-
-The Express server successfully received and processed the request.
-
-- **Endpoint:** `POST /api/returns`
-- **Request Method:** POST
-- **HTTP Status:** 200 OK
-- **Response Content-Type:** application/json
-- **Result:** Approved
-
-This demonstrates that the frontend communicates with the backend through an HTTP POST request.
-
-**Screenshot Evidence:**
-
-<img width="1470" height="824" alt="09597056-7B83-4ED0-A3D2-5430C8BEA444" src="https://github.com/user-attachments/assets/20409ad5-f2ac-4dec-85d4-1df61eb925b3" />
-
-
-### 3. Backend JSON Response — Approved
-
-The backend returned the following JSON response after processing a valid return request:
-
-```json
-{
-  "success": true,
-  "status": "Approved",
-  "message": "The return request passed the Week 8 backend rules.",
-  "remainingEligibleQuantity": 2
-}
-```
-
-The frontend successfully displayed the approval message returned by the API.
-
-This demonstrates that the application can receive and display structured JSON responses from the backend.
-
-**Screenshot Evidence:**
-
-<img width="1470" height="824" alt="EE5E0292-9B98-40F3-BBD7-B283F669B014" src="https://github.com/user-attachments/assets/afb62e7b-ac12-44d5-8b08-4a63f0865c3f" />
-
-
-
-### 4. Invalid Order Lookup — HTTP 404
-
-An order lookup was performed using customer and order information that did not match an existing purchase record.
-
-The server returned an HTTP 404 response, and the frontend displayed:
-
-**"No matching order was found."**
-
-- **Endpoint:** `GET /api/orders`
-- **HTTP Status:** 404 Not Found
-- **Result:** No matching order found
-
-This demonstrates that the order lookup API handles unsuccessful requests and displays appropriate feedback.
-
-**Screenshot Evidence:**
-
-<img width="1470" height="824" alt="C6D718CF-09B5-42E1-A185-EA615CCD7211" src="https://github.com/user-attachments/assets/05d0dae6-8f70-4222-944b-fccff679d6e5" />
-
-### Testing Summary
-
-The completed tests demonstrate successful frontend-to-backend communication through the local Express API.
-
-The evidence confirms:
-
-- The frontend successfully loads and communicates with the Express server.
-- Order lookup requests are processed through the API.
-- Valid return requests receive an HTTP 200 response.
-- The backend returns structured JSON containing the approval decision.
-- The frontend displays the backend's approval message.
-- Invalid order lookups receive an HTTP 404 response.
-
-A rejected `POST /api/returns` test is still needed to document HTTP 400 validation behavior. The six expected-versus-actual test results should also be recorded separately to complete the Week 9 testing documentation.
-
-## Conclusion
-
-The Week 9 TigerSteps checkpoint demonstrates the integration of our existing HTML, CSS, and JavaScript frontend with a local Node.js/Express API.
-
-The application successfully sends return requests through HTTP POST, processes them using the existing Week 8 backend business rules, and displays the resulting approval messages.
-
-Chrome DevTools provides evidence of successful API communication, HTTP status codes, and structured JSON responses.
-
-This checkpoint establishes the foundation for future cloud integration and database functionality while preserving the frontend design and business logic developed during previous weeks.
+- AWS Lambda and API Gateway (Week 10)
+- DynamoDB and saved requests (Week 11). Until then BR-5 forgets approved items when the server restarts.
+- Real refunds

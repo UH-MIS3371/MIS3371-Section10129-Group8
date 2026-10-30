@@ -77,7 +77,7 @@ This README summarizes all of them. When the source documents and this README di
 
 ## 6. How Do We Run and Use the Application?
 
-**Current status: Milestone 1 is project definition only. No application code exists yet.** The sections below describe how the finished application is intended to be used, and will be replaced with real setup steps as the build progresses.
+**Current status (Week 10, 2026-10-28):** the return form runs locally and sends each request to a local Express server. The same backend is packaged for AWS Lambda behind API Gateway (`index.js`). `backend/backend.js` decides every request against BR-1 to BR-7. No database yet, so nothing is saved.
 
 ### Intended user flow
 
@@ -85,19 +85,30 @@ A customer opens the return request page and enters their customer ID, the order
 
 Once validation passes, the system assigns a unique return request ID and records the request as Submitted. It then verifies the order against TigerSteps records and evaluates the request against the business rules in the table below. The customer immediately sees either an approval or a rejection with the specific reason, and can return to a status page at any time to check the current state of their request.
 
-### Planned setup (to be completed in later milestones)
+### How to run
 
-```
-# Clone the repository
-git clone <repository-url>
-cd tigersteps
+Needs Node.js (version 18 or later).
 
-# Open the application
-# (local file, local server, or hosted URL — to be determined)
+```bash
+npm install          # once, installs Express
+npm start            # then open http://localhost:3000
+npm run test:backend # backend rule tests
+npm run test:api     # HTTP tests that skip the form
+npm run test:lambda  # Lambda handler tests
+npm run zip:lambda   # builds lambda.zip for AWS Lambda
+npm run zip:frontend # builds frontend.zip for Amplify Hosting
 ```
+
+To deploy to AWS (Lambda, API Gateway, Amplify), follow `docs/week10-lambda.md` section 4.
 
 | Item | Status |
 |---|---|
+| Technology stack | HTML, CSS, JavaScript; Node.js and Express |
+| Hosting / deployment | Local, or serverless on AWS: Amplify Hosting, API Gateway, Lambda (see `docs/week10-lambda.md`) |
+| Sample test data | Fictional orders in `backend/backend.js` (NFR-5) |
+| Setup and run instructions | Above, and in `docs/week9-local.md` and `docs/week10-lambda.md` |
+
+---|---|
 | Technology stack | To be decided |
 | Hosting / deployment | To be decided |
 | Sample test data | To be created (fictional data only, per NFR-5) |
