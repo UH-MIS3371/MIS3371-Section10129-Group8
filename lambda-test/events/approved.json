@@ -1,0 +1,16 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /api/returns",
+  "rawPath": "/api/returns",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "requestContext": {
+    "http": {
+      "method": "POST",
+      "path": "/api/returns"
+    }
+  },
+  "body": "{\"customerId\":\"C1001\",\"orderId\":\"ORD-1001\",\"sku\":\"TS-1001\",\"returnQuantity\":1,\"reason\":\"Does not fit\",\"reportedCondition\":\"unworn\",\"preferredRefundMethod\":\"original-payment\"}",
+  "isBase64Encoded": false
+}

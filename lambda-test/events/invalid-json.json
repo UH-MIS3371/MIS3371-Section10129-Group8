@@ -1,0 +1,16 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /api/returns",
+  "rawPath": "/api/returns",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "requestContext": {
+    "http": {
+      "method": "POST",
+      "path": "/api/returns"
+    }
+  },
+  "body": "{not json",
+  "isBase64Encoded": false
+}

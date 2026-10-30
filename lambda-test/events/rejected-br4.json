@@ -1,0 +1,16 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /api/returns",
+  "rawPath": "/api/returns",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "requestContext": {
+    "http": {
+      "method": "POST",
+      "path": "/api/returns"
+    }
+  },
+  "body": "{\"customerId\":\"C1003\",\"orderId\":\"ORD-1003\",\"sku\":\"TS-2001\",\"returnQuantity\":1,\"reason\":\"Does not fit\",\"reportedCondition\":\"unworn\",\"preferredRefundMethod\":\"original-payment\",\"finalSale\":false,\"status\":\"Approved\"}",
+  "isBase64Encoded": false
+}
