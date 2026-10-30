@@ -32,7 +32,7 @@
 
   <!-- Page title area -->
   <section class="hero">
-    <p class="eyebrow">Online returns</p>
+    <p class="eyebrow">TigerStep's returns</p>
     <h1>Start a return</h1>
     <p class="hero-text">Submit one return request for a previous TigerSteps order. Our return rules check it right
       away and show you the decision.</p>
@@ -80,8 +80,8 @@
           </div>
           <div class="field">
             <label for="orderId">Order ID</label>
-            <input id="orderId" name="orderId" type="text" maxlength="12" placeholder="e.g. ORD-1001"
-              autocomplete="off" required>
+            <input id="orderId" name="orderId" type="text" maxlength="12" placeholder="e.g. ORD-1001" autocomplete="off"
+              required>
           </div>
         </div>
 
@@ -100,20 +100,14 @@
           <span class="step-desc">Only items from this order are listed. Order details fill in automatically.</span>
         </legend>
         <!-- Shown only when the step has the is-locked class -->
-        <p class="locked-note">Unlocks after we find your order</p>
+        <p class="locked-note">Unlocks after we found your order</p>
 
         <div class="field">
           <label for="sku">Item being returned</label>
-          <!-- The value of each option is the item code.
-               app.js matches that code to an order record for BR-2. -->
+          <!-- Empty on purpose. After "Find my order", app.js adds only the items
+               that belong to this customer's order (BR-2). -->
           <select id="sku" name="sku" required>
-            <option value="">Select an item from this order</option>
-            <option value="TS-1001">TS-1001 · Runner (Black)</option>
-            <option value="TS-1002">TS-1002 · Trail Boot (Brown)</option>
-            <option value="TS-1003">TS-1003 · Campus Low (White)</option>
-            <option value="TS-2001">TS-2001 · Court Classic (FINAL SALE)</option>
-            <option value="TS-2002">TS-2002 · Summer Slide (FINAL SALE)</option>
-            <option value="TS-3001">TS-3001 · Retro Trainer (Clearance Price)</option>
+            <option value="">Find your order first</option>
           </select>
         </div>
 
@@ -130,7 +124,7 @@
             <input id="deliveryDate" name="deliveryDate" type="date" readonly>
           </div>
           <div class="field">
-            <span class="field-label">Still eligible</span>
+            <span class="field-label">Still eligible to return</span>
             <!-- Shows previously returned and remaining eligible quantity -->
             <p id="orderSummary" class="readonly-box" aria-live="polite">—</p>
           </div>
