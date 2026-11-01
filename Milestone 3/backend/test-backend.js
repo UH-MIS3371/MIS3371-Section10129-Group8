@@ -1,7 +1,7 @@
 "use strict";
 
 // TigerSteps | Backend unit tests for BR-1 to BR-7.
-// Run from the repository root with either command:
+// Run from the Milestone 3 folder with either command:
 //   node backend/test-backend.js
 //   node --test backend/
 // Uses the test tools built into Node.js, so nothing needs to be installed.

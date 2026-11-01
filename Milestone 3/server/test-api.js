@@ -1,7 +1,7 @@
 "use strict";
 
 // TigerSteps | HTTP tests for the local API.
-// Run from the repository root: npm run test:api
+// Run from the Milestone 3 folder: npm run test:api
 // Each test sends JSON straight to the server, the way curl would. The form is
 // never opened, so these prove the backend holds the rules, not the browser.
 

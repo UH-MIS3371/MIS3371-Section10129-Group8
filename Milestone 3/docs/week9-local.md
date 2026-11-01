@@ -22,9 +22,10 @@ No AWS, no database. Nothing is saved (`persisted: false`).
 
 ## 3. How to Run
 
-From the repository root:
+From the repository root, go into the Milestone 3 folder first:
 
 ```bash
+cd "Milestone 3"
 npm install        # once, installs Express
 npm start          # starts the server
 ```

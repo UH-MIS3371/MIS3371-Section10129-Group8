@@ -77,7 +77,16 @@ This README summarizes all of them. When the source documents and this README di
 
 ## 6. How Do We Run and Use the Application?
 
-**Current status (Week 10, 2026-10-28):** the return form runs locally and sends each request to a local Express server. The same backend is packaged for AWS Lambda behind API Gateway (`index.js`). `backend/backend.js` decides every request against BR-1 to BR-7. No database yet, so nothing is saved.
+**Current status (Milestone 3, 2026-11-01):** the return form runs live on AWS (Amplify, API Gateway, Lambda) and locally with Express. `Milestone 3/backend/backend.js` decides every request against BR-1 to BR-7. No database yet, so nothing is saved.
+
+### Versions
+
+Each milestone keeps its own copy of the website, so you can compare them.
+
+| Version | Folder | What it is | How to see it |
+|---|---|---|---|
+| Milestone 2 | `Milestone 2/` | Client-only form. Order records and rules run in the browser | Open `Milestone 2/TigerStep_Return_Form.html` in a browser |
+| Milestone 3 | `Milestone 3/` | Rules moved to a trusted backend, local Express API, serverless on AWS | Live: https://staging.d1ll6q5a6re1aj.amplifyapp.com. Local: see `Milestone 3/README.md` |
 
 ### Intended user flow
 
@@ -85,33 +94,23 @@ A customer opens the return request page and enters their customer ID, the order
 
 Once validation passes, the system assigns a unique return request ID and records the request as Submitted. It then verifies the order against TigerSteps records and evaluates the request against the business rules in the table below. The customer immediately sees either an approval or a rejection with the specific reason, and can return to a status page at any time to check the current state of their request.
 
-### How to run
+### How to run (Milestone 3)
 
-Needs Node.js (version 18 or later).
+Needs Node.js 18 or later. Run the commands inside the `Milestone 3` folder:
 
 ```bash
+cd "Milestone 3"
 npm install          # once, installs Express
 npm start            # then open http://localhost:3000
-npm run test:backend # backend rule tests
-npm run test:api     # HTTP tests that skip the form
-npm run test:lambda  # Lambda handler tests
-npm run zip:lambda   # builds lambda.zip for AWS Lambda
-npm run zip:frontend # builds frontend.zip for Amplify Hosting
 ```
 
-To deploy to AWS (Lambda, API Gateway, Amplify), follow `docs/week10-lambda.md` section 4.
+Tests, the AWS deployment steps, and weekly notes are listed in `Milestone 3/README.md`.
 
 | Item | Status |
 |---|---|
-| Technology stack | HTML, CSS, JavaScript; Node.js and Express |
-| Hosting / deployment | Local, or serverless on AWS: Amplify Hosting, API Gateway, Lambda (see `docs/week10-lambda.md`) |
-| Sample test data | Fictional orders in `backend/backend.js` (NFR-5) |
-| Setup and run instructions | Above, and in `docs/week9-local.md` and `docs/week10-lambda.md` |
-
----|---|
-| Technology stack | To be decided |
-| Hosting / deployment | To be decided |
-| Sample test data | To be created (fictional data only, per NFR-5) |
-| Setup and run instructions | To be added when the application is built |
+| Technology stack | HTML, CSS, JavaScript; Node.js and Express; AWS Amplify, API Gateway, Lambda |
+| Hosting / deployment | Live on AWS (see `Milestone 3/docs/week10-lambda.md`), or local |
+| Sample test data | Fictional orders in `Milestone 3/backend/backend.js` (NFR-5) |
+| Setup and run instructions | `Milestone 3/README.md`, `Milestone 3/docs/week9-local.md`, `Milestone 3/docs/week10-lambda.md` |
 
 ---

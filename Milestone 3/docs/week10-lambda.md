@@ -1,5 +1,7 @@
 # TigerSteps: Week 10 Serverless Deployment on AWS
 
+**Live site:** https://staging.d1ll6q5a6re1aj.amplifyapp.com
+
 ## 1. What Week 10 Adds
 
 The whole system now runs on AWS with no server to manage. Nothing about the rules changed.
@@ -49,7 +51,10 @@ Do the steps in this order. Each step needs a value from the step before it.
 
 ### 4.0 Before you start
 
+Run every `npm` command in this guide from the Milestone 3 folder. `lambda.zip` and `frontend.zip` are created there.
+
 ```bash
+cd "Milestone 3"
 npm run test:backend && npm run test:api && npm run test:lambda
 npm run zip:lambda
 ```

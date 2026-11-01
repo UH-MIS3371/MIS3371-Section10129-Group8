@@ -70,7 +70,10 @@ Case 19 checks that sample delivery dates are counted from the decision day. Bef
 
 ## 6. How to Run
 
+From the Milestone 3 folder:
+
 ```bash
+cd "Milestone 3"
 npm run test:backend
 ```
 

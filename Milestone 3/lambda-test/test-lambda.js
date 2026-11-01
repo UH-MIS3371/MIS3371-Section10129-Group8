@@ -1,7 +1,7 @@
 "use strict";
 
 // TigerSteps | Tests for the Lambda handler (index.js).
-// Run from the repository root: npm run test:lambda
+// Run from the Milestone 3 folder: npm run test:lambda
 // Uses the same event files you can paste into the Lambda console Test tab.
 
 const test = require("node:test");
