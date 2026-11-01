@@ -25,7 +25,7 @@ function sameText(first, second) {
 // AWS_API_URL: paste the API Gateway Invoke URL here before building
 // frontend.zip, for example 'https://abc123.execute-api.us-east-1.amazonaws.com'
 // (no slash at the end). This is the only line to change for AWS.
-const AWS_API_URL = '';
+const AWS_API_URL = 'https://rvky1qltei.execute-api.us-east-1.amazonaws.com';
 
 // Opened through the local Express server (npm start): the API is on the same
 // server, so no address is needed. Opened anywhere else (Amplify): use AWS.
