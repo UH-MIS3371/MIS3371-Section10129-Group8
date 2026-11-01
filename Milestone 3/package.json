@@ -1,0 +1,17 @@
+{
+  "name": "tigersteps-return-request",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TigerSteps return request form, local Express API, and backend rules BR-1 to BR-7.",
+  "scripts": {
+    "start": "node server/server.js",
+    "test:backend": "node backend/test-backend.js",
+    "test:api": "node server/test-api.js",
+    "test:lambda": "node lambda-test/test-lambda.js",
+    "zip:lambda": "rm -f lambda.zip && zip lambda.zip index.js backend/backend.js",
+    "zip:frontend": "rm -f frontend.zip && cd src && zip ../frontend.zip index.html app.js style.css"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
