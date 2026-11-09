@@ -94,7 +94,7 @@ Total: 12. Passed: 12. Failed: 0.
 
 The real DynamoDB calls are tested in section 7 on AWS, the same way the course slides test them.
 
-## 7. AWS and Browser Tests (fill in after running them)
+## 7. AWS and Browser Tests
 
 | # | Where | Input | Expected | Actual | Pass/Fail |
 |---|---|---|---|---|---|
@@ -105,9 +105,9 @@ The real DynamoDB calls are tested in section 7 on AWS, the same way the course 
 | 5 | Lambda console | `get-return.json` with the ID from row 1 | 200 with `returnRequest` | 200, `returnRequest` for `RR-b1886c24-...`: C1001 / ORD-1001 / TS-1001, qty 1, status Approved, same `submittedAt` and `decidedAt` as row 1 (2026-11-09) | PASS |
 | 6 | Lambda console | `get-return-not-found.json` | 404 | 404 "Return not found. Check the confirmation number.", no record returned (2026-11-09) | PASS |
 | 7 | Browser tab | `<Invoke URL>/api/returns/<ID from row 1>` | Saved return as JSON | `{"success":true,"returnRequest":{...}}` for `RR-b1886c24-...`, status Approved, same fields as row 5 (2026-11-09) | PASS |
-| 8 | Live site | Submit C1004 / ORD-1004 / TS-1001, qty 1 | Approved and saved; confirmation number shown | | |
-| 9 | Live site | View status with that number | Status Approved, item TS-1001, quantity 1 | | |
-| 10 | Live site | View status with `RR-00000000-0000-0000-0000-000000000000` | "Return not found" message, no record shown | | |
+| 8 | Live site | Submit C1004 / ORD-1004 / TS-1001, qty 1 | Approved and saved; confirmation number shown | "Approved and saved" message and Confirmation number `RR-2e34be92-ba98-4862-8c93-ed0d1b094d56` shown (2026-11-08, 8:08 PM Houston) | PASS |
+| 9 | Live site | View status with that number | Status Approved, item TS-1001, quantity 1 | Number filled in automatically. Shows `RR-2e34be92-...`, Status Approved, Item TS-1001, Quantity 1, Submitted and Decided 11/8/2026 8:08:55 PM | PASS |
+| 10 | Live site | View status with `RR-00000000-0000-0000-0000-000000000000` | "Return not found" message, no record shown | "Return not found. Check the confirmation number." shown, no result list (2026-11-08) | PASS |
 | 11 | Live site | Submit C1003 / ORD-1003 / TS-2001 | Rejected BR-4; no confirmation number | | |
 
 ## 8. When Something Goes Wrong
