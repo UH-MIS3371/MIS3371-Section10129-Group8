@@ -1,0 +1,17 @@
+{
+  "version": "2.0",
+  "routeKey": "GET /api/orders",
+  "rawPath": "/api/orders",
+  "rawQueryString": "customerId=C1004&orderId=ORD-1004",
+  "queryStringParameters": {
+    "customerId": "C1004",
+    "orderId": "ORD-1004"
+  },
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/api/orders"
+    }
+  },
+  "isBase64Encoded": false
+}
