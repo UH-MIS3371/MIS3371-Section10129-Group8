@@ -41,6 +41,13 @@ app.post("/api/returns", (req, res) => {
   return res.status(result.success ? 200 : 400).json(result);
 });
 
+// View status (GET by confirmation number). The local server does not save
+// anything (persisted: false), so there is nothing to look up here. The
+// Lambda handler (index.js) reads saved returns from DynamoDB on AWS.
+app.get("/api/returns/:returnId", (req, res) => {
+  return res.status(404).json({ success: false, message: "Saved returns are kept on AWS only. Use the live site to view one." });
+});
+
 // A body that is not valid JSON never reaches the backend.
 app.use((err, req, res, next) => {
   if (err.type === "entity.parse.failed" || err.type === "entity.too.large") {

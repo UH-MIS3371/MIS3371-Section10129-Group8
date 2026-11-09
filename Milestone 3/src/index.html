@@ -59,6 +59,39 @@
       <p id="returnMessage" class="return-message" role="status" aria-live="polite">
         Enter your Customer ID and Order ID to begin.
       </p>
+
+      <!-- Shown only after the backend confirms the return was saved (persisted: true) -->
+      <p id="confirmationPanel" class="confirmation-panel" hidden>
+        <span class="confirmation-label">Confirmation number</span>
+        <code id="confirmationNumber"></code>
+      </p>
+
+      <!-- View status: looks up one saved return by its confirmation number (GET) -->
+      <form id="statusLookupForm" class="status-lookup" aria-labelledby="statusLookupHeading">
+        <h3 id="statusLookupHeading" class="status-lookup-title">View a saved return</h3>
+        <div class="field">
+          <label for="statusReturnId">Confirmation number</label>
+          <input id="statusReturnId" name="statusReturnId" type="text" placeholder="RR-..." autocomplete="off"
+            spellcheck="false" required>
+        </div>
+        <button id="viewStatusButton" class="btn btn-secondary" type="submit">View status</button>
+        <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
+        <!-- app.js fills these from the saved record. Nothing here is made up. -->
+        <dl id="statusResult" class="status-result" hidden>
+          <dt>Confirmation number</dt>
+          <dd id="viewedReturnId"></dd>
+          <dt>Status</dt>
+          <dd id="viewedStatus"></dd>
+          <dt>Item</dt>
+          <dd id="viewedItem"></dd>
+          <dt>Quantity</dt>
+          <dd id="viewedQuantity"></dd>
+          <dt>Submitted</dt>
+          <dd id="viewedSubmittedAt"></dd>
+          <dt>Decided</dt>
+          <dd id="viewedDecidedAt"></dd>
+        </dl>
+      </form>
     </aside>
 
     <!-- The return request form, split into 4 steps -->

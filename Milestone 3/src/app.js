@@ -59,6 +59,22 @@ const statusSteps = document.querySelectorAll('#returnState .status-step');
 const stepItem = document.querySelector('#stepItem');
 const stepDetails = document.querySelector('#stepDetails');
 
+// Confirmation number and View status (Week 11)
+const confirmationPanel = document.querySelector('#confirmationPanel');
+const confirmationNumber = document.querySelector('#confirmationNumber');
+const statusLookupForm = document.querySelector('#statusLookupForm');
+const statusReturnIdInput = document.querySelector('#statusReturnId');
+const statusMessage = document.querySelector('#statusMessage');
+const statusResult = document.querySelector('#statusResult');
+const viewedFields = {
+    returnId: document.querySelector('#viewedReturnId'),
+    status: document.querySelector('#viewedStatus'),
+    sku: document.querySelector('#viewedItem'),
+    returnQuantity: document.querySelector('#viewedQuantity'),
+    submittedAt: document.querySelector('#viewedSubmittedAt'),
+    decidedAt: document.querySelector('#viewedDecidedAt')
+};
+
 // The order confirmed by the last lookup, and the item chosen from it.
 let matchedOrderItems = [];
 let lookupCustomerId = '';
@@ -112,6 +128,25 @@ function clearDecision() {
     formErrors.textContent = '';
     formErrors.hidden = true;
     setStatusRail('draft');
+    hideConfirmation();
+}
+
+// The confirmation number is shown only for a return the backend saved.
+function showConfirmation(returnId) {
+    if (!confirmationPanel) {
+        return;
+    }
+    confirmationNumber.textContent = returnId;
+    confirmationPanel.hidden = false;
+    // Fill the View status box so the customer does not copy the ID by hand.
+    statusReturnIdInput.value = returnId;
+}
+
+function hideConfirmation() {
+    if (confirmationPanel) {
+        confirmationNumber.textContent = '';
+        confirmationPanel.hidden = true;
+    }
 }
 
 function clearSelectedItem() {
@@ -328,9 +363,16 @@ async function handleSubmit(event) {
     }
 
     if (response.ok && result.status === 'Approved') {
-        // Nothing is saved before Week 11, so never say "saved".
-        messageOutput.textContent = 'Approved. All return rules passed. Reference ' + result.returnId
-            + ' (not saved yet).';
+        // Say "saved" only when the backend confirms the database write.
+        // The local server does not save, so it keeps the old message.
+        if (result.success === true && result.persisted === true && result.returnId) {
+            messageOutput.textContent = 'Approved and saved. All return rules passed. '
+                + 'Keep your confirmation number to view this return later.';
+            showConfirmation(result.returnId);
+        } else {
+            messageOutput.textContent = 'Approved. All return rules passed. Reference ' + result.returnId
+                + ' (not saved yet).';
+        }
         messageOutput.className = 'return-message decision-approved';
         setStatusRail('approved');
     } else if (result.status === 'Rejected') {
@@ -376,4 +418,68 @@ if (skuInput) {
 
 if (returnQuantityInput) {
     returnQuantityInput.addEventListener('input', updateQuantityStatus);
+}
+
+// ============================================================
+// View status: GET one saved return by its confirmation number
+// ============================================================
+
+function showStatusMessage(text, isError) {
+    statusMessage.textContent = text;
+    statusMessage.classList.toggle('is-error', Boolean(isError));
+}
+
+// Shows a stored date in the customer's local time, or 'Unavailable'.
+function formatStoredDate(value) {
+    const date = new Date(value);
+    return value && !Number.isNaN(date.getTime()) ? date.toLocaleString() : 'Unavailable';
+}
+
+// Fills the result list from the saved record only. A missing field says
+// 'Unavailable'; nothing is invented.
+function showSavedReturn(saved) {
+    viewedFields.returnId.textContent = saved.returnId || 'Unavailable';
+    viewedFields.status.textContent = saved.status || 'Unavailable';
+    viewedFields.sku.textContent = saved.sku || 'Unavailable';
+    viewedFields.returnQuantity.textContent = saved.returnQuantity ?? 'Unavailable';
+    viewedFields.submittedAt.textContent = formatStoredDate(saved.submittedAt);
+    viewedFields.decidedAt.textContent = formatStoredDate(saved.decidedAt);
+    statusResult.hidden = false;
+}
+
+async function handleStatusLookup(event) {
+    event.preventDefault();
+    statusResult.hidden = true;
+
+    const returnId = statusReturnIdInput.value.trim();
+    if (!returnId) {
+        showStatusMessage('Enter your confirmation number.', true);
+        return;
+    }
+
+    showStatusMessage('Looking up your return...', false);
+
+    let response;
+    let result;
+    try {
+        response = await fetch(API_BASE_URL + '/api/returns/' + encodeURIComponent(returnId), { method: 'GET' });
+        result = await response.json();
+    } catch (error) {
+        showStatusMessage(CONNECTION_MESSAGE, true);
+        return;
+    }
+
+    // 404 means there is no saved return with that number: show a message,
+    // never a made-up record.
+    if (!response.ok || result.success !== true || !result.returnRequest) {
+        showStatusMessage(result.message || 'Lookup failed. Please try again.', true);
+        return;
+    }
+
+    showStatusMessage('', false);
+    showSavedReturn(result.returnRequest);
+}
+
+if (statusLookupForm) {
+    statusLookupForm.addEventListener('submit', handleStatusLookup);
 }

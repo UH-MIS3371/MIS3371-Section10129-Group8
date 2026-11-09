@@ -109,3 +109,11 @@ test("Validation: a body that is not JSON is 400", async () => {
   assert.equal(code, 400);
   assert.equal(result.error, "Validation");
 });
+
+test("Local: View status explains that saved returns live on AWS only (404 JSON)", async () => {
+  const response = await fetch(baseUrl + "/api/returns/RR-00000000-0000-0000-0000-000000000000");
+  const body = await response.json();
+  assert.equal(response.status, 404);
+  assert.equal(body.success, false);
+  assert.match(body.message, /AWS only/);
+});
