@@ -77,16 +77,15 @@ This README summarizes all of them. When the source documents and this README di
 
 ## 6. How Do We Run and Use the Application?
 
-**Current status (Milestone 3, 2026-11-01):** the return form runs live on AWS (Amplify, API Gateway, Lambda) and locally with Express. `Milestone 3/backend/backend.js` decides every request against BR-1 to BR-7. No database yet, so nothing is saved.
+**Current status (Milestone 3, Week 11, 2026-11-08):** the return form runs live on AWS (Amplify, API Gateway, Lambda, DynamoDB) and locally with Express. `Milestone 3/backend/backend.js` decides every request against BR-1 to BR-7. On AWS, approved returns are saved in DynamoDB and can be viewed later by confirmation number. The local server does not save.
 
 ### Versions
 
-Each milestone keeps its own copy of the website, so you can compare them.
+The current version lives in `Milestone 3/`. The Milestone 2 client-only form is kept on the `main` branch and in git history.
 
 | Version | Folder | What it is | How to see it |
 |---|---|---|---|
-| Milestone 2 | `Milestone 2/` | Client-only form. Order records and rules run in the browser | Open `Milestone 2/TigerStep_Return_Form.html` in a browser |
-| Milestone 3 | `Milestone 3/` | Rules moved to a trusted backend, local Express API, serverless on AWS | Live: https://staging.d1ll6q5a6re1aj.amplifyapp.com. Local: see `Milestone 3/README.md` |
+| Milestone 3 | `Milestone 3/` | Rules moved to a trusted backend, local Express API, serverless on AWS, approved returns saved in DynamoDB | Live: https://staging.d1ll6q5a6re1aj.amplifyapp.com. Local: see `Milestone 3/README.md` |
 
 ### Intended user flow
 
@@ -108,7 +107,7 @@ Tests, the AWS deployment steps, and weekly notes are listed in `Milestone 3/REA
 
 | Item | Status |
 |---|---|
-| Technology stack | HTML, CSS, JavaScript; Node.js and Express; AWS Amplify, API Gateway, Lambda |
+| Technology stack | HTML, CSS, JavaScript; Node.js and Express; AWS Amplify, API Gateway, Lambda, DynamoDB |
 | Hosting / deployment | Live on AWS (see `Milestone 3/docs/week10-lambda.md`), or local |
 | Sample test data | Fictional orders in `Milestone 3/backend/backend.js` (NFR-5) |
 | Setup and run instructions | `Milestone 3/README.md`, `Milestone 3/docs/week9-local.md`, `Milestone 3/docs/week10-lambda.md` |
