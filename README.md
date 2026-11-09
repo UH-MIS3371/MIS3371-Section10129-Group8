@@ -77,7 +77,7 @@ This README summarizes all of them. When the source documents and this README di
 
 ## 6. How Do We Run and Use the Application?
 
-**Current status (Milestone 3, 2026-11-01):** the return form runs live on AWS (Amplify, API Gateway, Lambda) and locally with Express. `Milestone 3/backend/backend.js` decides every request against BR-1 to BR-7. No database yet, so nothing is saved.
+**Current status (Milestone 4, Week 11, 2026-11-08):** the return form runs live on AWS (Amplify, API Gateway, Lambda, DynamoDB) and locally with Express. `Milestone 4/backend/backend.js` decides every request against BR-1 to BR-7. On AWS, approved returns are saved in DynamoDB and can be viewed later by confirmation number. The local server does not save.
 
 ### Versions
 
@@ -86,7 +86,8 @@ Each milestone keeps its own copy of the website, so you can compare them.
 | Version | Folder | What it is | How to see it |
 |---|---|---|---|
 | Milestone 2 | `Milestone 2/` | Client-only form. Order records and rules run in the browser | Open `Milestone 2/TigerStep_Return_Form.html` in a browser |
-| Milestone 3 | `Milestone 3/` | Rules moved to a trusted backend, local Express API, serverless on AWS | Live: https://staging.d1ll6q5a6re1aj.amplifyapp.com. Local: see `Milestone 3/README.md` |
+| Milestone 3 | `Milestone 3/` | Rules moved to a trusted backend, local Express API, serverless on AWS. Nothing is saved | Local: see `Milestone 3/README.md`. The live site now runs Milestone 4 |
+| Milestone 4 | `Milestone 4/` | Milestone 3 plus DynamoDB: approved returns are saved, the customer gets a confirmation number and can view the return later | Live: https://staging.d1ll6q5a6re1aj.amplifyapp.com. Local: see `Milestone 4/README.md` |
 
 ### Intended user flow
 
@@ -94,23 +95,23 @@ A customer opens the return request page and enters their customer ID, the order
 
 Once validation passes, the system assigns a unique return request ID and records the request as Submitted. It then verifies the order against TigerSteps records and evaluates the request against the business rules in the table below. The customer immediately sees either an approval or a rejection with the specific reason, and can return to a status page at any time to check the current state of their request.
 
-### How to run (Milestone 3)
+### How to run (Milestone 4)
 
-Needs Node.js 18 or later. Run the commands inside the `Milestone 3` folder:
+Needs Node.js 18 or later. Run the commands inside the `Milestone 4` folder:
 
 ```bash
-cd "Milestone 3"
+cd "Milestone 4"
 npm install          # once, installs Express
 npm start            # then open http://localhost:3000
 ```
 
-Tests, the AWS deployment steps, and weekly notes are listed in `Milestone 3/README.md`.
+Tests, the AWS deployment steps, and weekly notes are listed in `Milestone 4/README.md`.
 
 | Item | Status |
 |---|---|
-| Technology stack | HTML, CSS, JavaScript; Node.js and Express; AWS Amplify, API Gateway, Lambda |
-| Hosting / deployment | Live on AWS (see `Milestone 3/docs/week10-lambda.md`), or local |
-| Sample test data | Fictional orders in `Milestone 3/backend/backend.js` (NFR-5) |
-| Setup and run instructions | `Milestone 3/README.md`, `Milestone 3/docs/week9-local.md`, `Milestone 3/docs/week10-lambda.md` |
+| Technology stack | HTML, CSS, JavaScript; Node.js and Express; AWS Amplify, API Gateway, Lambda, DynamoDB |
+| Hosting / deployment | Live on AWS (see `Milestone 4/docs/week10-lambda.md` and `Milestone 4/docs/week11-dynamodb.md`), or local |
+| Sample test data | Fictional orders in `Milestone 4/backend/backend.js` (NFR-5) |
+| Setup and run instructions | `Milestone 4/README.md`, `Milestone 4/docs/week9-local.md`, `Milestone 4/docs/week10-lambda.md`, `Milestone 4/docs/week11-dynamodb.md` |
 
 ---

@@ -1,0 +1,15 @@
+{
+  "version": "2.0",
+  "routeKey": "GET /api/returns/{returnId}",
+  "rawPath": "/api/returns/RR-PASTE-THE-CONFIRMATION-NUMBER-HERE",
+  "pathParameters": {
+    "returnId": "RR-PASTE-THE-CONFIRMATION-NUMBER-HERE"
+  },
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/api/returns/RR-PASTE-THE-CONFIRMATION-NUMBER-HERE"
+    }
+  },
+  "isBase64Encoded": false
+}

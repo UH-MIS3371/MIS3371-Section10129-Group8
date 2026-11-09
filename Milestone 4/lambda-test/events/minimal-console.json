@@ -1,0 +1,9 @@
+{
+  "version": "2.0",
+  "requestContext": {
+    "http": {
+      "method": "POST"
+    }
+  },
+  "body": "{\"customerId\":\"C1008\",\"orderId\":\"ORD-1008\",\"sku\":\"TS-1003\",\"returnQuantity\":1,\"reason\":\"Does not fit\",\"reportedCondition\":\"unworn\",\"preferredRefundMethod\":\"original-payment\"}"
+}
