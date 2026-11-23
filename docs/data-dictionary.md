@@ -97,13 +97,12 @@ Only some fields appear on the form. The **HTML id (current)** column matches th
 
 ## Implementation Status (Milestone 4, November 2026)
 
-| Fields | Milestone 2 (browser) | Week 8–9 backend | Planned |
+| Fields | Milestone 2 (browser) | Milestone 4 backend and AWS | Notes |
 |---|---|---|---|
-| User-entered and user-selected fields | Yes | Yes (the 7 API fields) | n/a |
-| Order record fields | Yes, from fictional records in the browser | Yes, from fictional records in the backend (`finalSale` and `clearance` not checked yet) | DynamoDB (Week 11) |
-| `decision`, `decisionReason` | Yes | Partly (stops at the first failed rule) | n/a |
-| `returnId`, `status`, timestamps, `statusHistory` | No (M2 is a preview only, no record is saved) | No | Backend + DynamoDB (Week 11) |
-
+| User-entered and user-selected fields | Captured by the browser | Seven validated API request fields | Browser validation is only a convenience; backend validation is authoritative. |
+| Order record fields | Fictional records in the browser | Fictional trusted records in `backend/backend.js`; `finalSale` and `clearance` are checked (BR-4) | Order data is not yet stored in a live Orders table. |
+| `decision`, `decisionReason` | Browser-side decision | Backend checks BR-1 through BR-7 and collects all applicable failed reasons (BR-6) | If BR-2 fails, evaluation stops because no trusted order item exists. |
+| `returnId`, `status`, timestamps, `statusHistory` | No persistent record | Backend creates status and history; AWS Lambda assigns an `RR-` UUID and DynamoDB saves Approved returns | Rejected decisions are not persisted; local Express does not save. |
 
 ### Current Milestone 4 notes
 
