@@ -36,15 +36,38 @@ The rules that drive the decision are listed in [Business Rules](#business-rules
 
 ## 3. Who Is on the Team?
 
-| Member | Role and responsibility |
-|---|---|
-| **Brieana Dinh** | Team leader. Final quality and integration approval, setting up meetings and deadlines. |
-| **Danna Z. Gonzalez** | Defining Business Problem, Main Transaction, and Scope |
-| **Samantha Abi-Ranched** | Defining Stakeholders and Requirements |
-| **Justin Vu** | Business Rules and Transaction States |
-| **Nhu Tran** | Team Charter and GitHub setup |
+| Member | Milestone 1 responsibility | Milestones 2–4 / final presentation |
+|---|---|---|
+| **Brieana Dinh** | Team leader; quality and integration approval | Backend and business rules; Part D and final integration |
+| **Danna Z. Gonzalez** | Business problem, main transaction and scope | Requirements context and Part A presentation; reviews README business rules |
+| **Samantha Abi-Rached** | Stakeholders and requirements | Frontend and Part C presentation |
+| **Justin Vu** | Business rules and transaction states | API Gateway, Lambda, DynamoDB; Parts E and F |
+| **Nhu Tran** | Team charter and GitHub setup | Repository documentation, cleanup and testing; Parts B and G |
 
 ---
+
+## Business Rules
+
+| Rule | Policy | Milestone 4 behavior |
+|---|---|---|
+| **BR-1 — Return window** | Returns are accepted through day 60 after delivery; day 61 and later fail. | Server checks delivery date against the store-local date. |
+| **BR-2 — Purchase verification** | Customer, order, and SKU must match a known purchase. | Backend uses trusted order records, not browser-supplied purchase data. |
+| **BR-3 — Quantity purchased** | Return quantity must be a positive whole number within the remaining unreturned quantity. | Backend checks the requested quantity against the order record. |
+| **BR-4 — Final-sale eligibility** | Final-sale or clearance items are ineligible. | Backend rejects flagged items. |
+| **BR-5 — Duplicate prevention** | Only one active return per customer, order, and item. | AWS uses a DynamoDB ACTIVE# marker to prevent duplicate approved returns. |
+| **BR-6 — Automatic decision** | Approve only when all applicable rules pass; otherwise reject with reasons. | Backend evaluates applicable rules and reports failures. |
+| **BR-7 — State sequence** | Draft → Submitted → Approved or Rejected. | Submitted transactions receive a final decision and status history. |
+
+## Transaction States
+
+| State | Meaning | Current implementation |
+|---|---|---|
+| **Draft** | Customer is filling out the form; no valid submission yet. | Frontend form state. |
+| **Submitted** | Valid request was received for decision. | Recorded in backend status history. |
+| **Under Review** | Evaluation is pending. | Defined in the Milestone 1 model; not a separate persistent stage in this automatic-decision implementation. |
+| **Approved** | All applicable return rules passed. | On AWS, approved returns are persisted and retrievable using an RR- confirmation ID. |
+| **Rejected** | One or more return rules failed; reasons are shown. | Rejected requests are not saved as retrievable records in Milestone 4. |
+| **Failed** | Technical failure prevented processing; not a policy rejection. | Displayed as a service error, not as Rejected. |
 
 ## 4. What Is in Scope?
 
@@ -66,10 +89,15 @@ All Milestone 1 documents live in the `/docs` folder of this repository.
 |---|---|---|
 | `TigerSteps_business-problem.docx` | Business problem, why it matters, in-scope and out-of-scope boundaries | Danna Z. Gonzalez |
 | `TigerSteps_main-transaction.docx` | Transaction event, trigger, inputs, system action, outcome, official record | Danna Z. Gonzalez |
-| `TigerSteps_stakeholders.docx` | Four stakeholder groups and their needs | Samantha Abi-Ranched |
-| `TigerSteps_requirements.docx` | Seven functional and five non-functional requirements | Samantha Abi-Ranched |
+| `TigerSteps_stakeholders.docx` | Four stakeholder groups and their needs | Samantha Abi-Rached |
+| `TigerSteps_requirements.docx` | Seven functional and five non-functional requirements | Samantha Abi-Rached |
 | `TigerSteps_Business_Rules_States.docx` | Seven business rules (BR-1 to BR-7) and six transaction states | Justin Vu |
-| `TigerSteps_team-charter.docx` | Team charter, meeting cadence, working agreements | Nhu Tran |
+| `TigerSteps_TeamCharterGroup8.docx` | Team charter, meeting cadence, working agreements | Nhu Tran |
+| `TigerSteps_architecture.docx` | System architecture and integration | Group 8 |
+| `TigerSteps_Data_Dictionary.docx` | Milestone 1 data definitions | Group 8 |
+| `TigerSteps_State_Transition Diagram&Definition.docx` | Transaction state transition diagram | Group 8 |
+| `TigerSteps_WorkflowDiagram.pdf` | Return workflow diagram | Group 8 |
+| `data-dictionary.md` | API data contract and Milestone 4 form mapping | Group 8 |
 
 This README summarizes all of them. When the source documents and this README disagree, the source documents are authoritative until the README is updated.
 
@@ -93,7 +121,7 @@ Each milestone keeps its own copy of the website, so you can compare them.
 
 A customer opens the return request page and enters their customer ID, the order number, and the item they want to return, along with the quantity, a return reason, the reported condition of the item, and their preferred refund method. When they submit, the form validates that every required field is present and correctly formatted, and flags any field that needs correcting.
 
-Once validation passes, the system assigns a unique return request ID and records the request as Submitted. It then verifies the order against TigerSteps records and evaluates the request against the business rules in the table below. The customer immediately sees either an approval or a rejection with the specific reason, and can return to a status page at any time to check the current state of their request.
+Once validation passes, the system assigns a unique return request ID and records the request as Submitted. It then verifies the order against TigerSteps records and evaluates the request against the business rules in the table below. The customer immediately sees either an approval or a rejection with the specific reason, and, if Approved on AWS, can later retrieve the saved request using its confirmation number.
 
 ### How to run (Milestone 4)
 
@@ -115,3 +143,10 @@ Tests, the AWS deployment steps, and weekly notes are listed in `Milestone 4/REA
 | Setup and run instructions | `Milestone 4/README.md`, `Milestone 4/docs/week9-local.md`, `Milestone 4/docs/week10-lambda.md`, `Milestone 4/docs/week11-dynamodb.md` |
 
 ---
+
+## Final Presentation
+
+- **Live application:** https://staging.d1ll6q5a6re1aj.amplifyapp.com/
+- **Current source code:** [Milestone 4/](Milestone%204/)
+- **Presentation materials:** The team will add the final merged slide deck link when it is uploaded to this repository.
+- **Persistence note:** Only Approved returns are stored and retrievable in the AWS deployment; the local Express server does not persist returns.

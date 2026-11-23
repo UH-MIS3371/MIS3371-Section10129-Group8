@@ -17,7 +17,7 @@ This document defines every data field in one TigerSteps online return request. 
 
 | Field name | Display name | Category | Meaning | Type | Required? | Source | Rule / Constraint | Example |
 |---|---|---|---|---|---|---|---|---|
-| `returnId` | Return ID | System | Unique ID for one return request | Text | System | Backend | Must be unique. Created by the backend when the request is submitted, never by the browser | `RR-1025` |
+| `returnId` | Return ID | System | Unique ID for one return request | Text | System | Backend | Must be unique. Created by the backend when the request is submitted, never by the browser | `RR-2e34be92-ba98-4862-8c93-ed0d1b094d56` |
 | `customerId` | Customer ID | User-entered | Identifies the customer making the return | Text | Yes | Customer | Max 12 characters. Must match the order (BR-2) | `C1001` |
 | `orderId` | Order ID | User-entered | Identifies the original purchase | Text | Yes | Customer | Max 12 characters. Must be a TigerSteps order that belongs to the customer (BR-2) | `ORD-1001` |
 | `sku` | Item SKU | User-selected | Identifies the footwear item being returned | Text | Yes | Customer chooses from items on the verified order | Must be an item on that order (BR-2) | `TS-1001` |
@@ -56,23 +56,23 @@ For example, a customer must not be able to send `deliveryDate` = yesterday to p
 
 ## Form Mapping
 
-Only some fields appear on the form. The **HTML id (current)** column shows the id used in the form today. Ids that differ from the field name should be renamed to match when the form is rebuilt.
+Only some fields appear on the form. The **HTML id (current)** column matches the current `Milestone 4/src/index.html` form.
 
 | Field name | On the form? | HTML id (current) | Control |
 |---|---|---|---|
-| `customerId` | Yes, editable | `CustomerID` | Text input |
-| `phone` | Yes, editable | `custPhone` | Phone input |
-| `email` | Yes, editable | `custEmail` | Email input |
-| `orderId` | Yes, editable | `orderID` | Text input |
-| `sku` | Yes, after lookup | `itemSKU` | Drop-down, locked until the order is found |
+| `customerId` | Yes, editable | `customerId` | Text input |
+| `phone` | Yes, editable | `phone` | Phone input |
+| `email` | Yes, editable | `email` | Email input |
+| `orderId` | Yes, editable | `orderId` | Text input |
+| `sku` | Yes, after lookup | `sku` | Drop-down, locked until the order is found |
 | `quantityPurchased` | Yes, read-only | `quantityPurchased` | Number, filled after lookup |
-| `deliveryDate` | Yes, read-only | `dayDelivered` | Date, filled after lookup |
+| `deliveryDate` | Yes, read-only | `deliveryDate` | Date, filled after lookup |
 | `quantityPreviouslyReturned`, `remainingEligibleQuantity` | Shown as text | `orderSummary` | Summary line |
 | `returnQuantity` | Yes, editable | `returnQuantity` | Number input |
 | `reportedCondition` | Yes, editable | `reportedCondition` | Drop-down |
-| `preferredRefundMethod` | Yes, editable | `preferredRefundMethod` | Drop-down |
-| `reason` | Yes, editable | `description` | Text area |
-| `receiptAvailable` | Yes, editable | `receiptAttached` | Checkbox |
+| `preferredRefundMethod` | Yes, editable | `preferredRefundMethod` | Radio group |
+| `reason` | Yes, editable | `reason` | Text area |
+| `receiptAvailable` | Yes, editable | `receiptAvailable` | Checkbox |
 | `status` | Shown as text | `returnState` | Status line |
 | `decision`, `decisionReason` | Shown as text | `returnMessage` | Result message |
 | `finalSale`, `clearance`, `returnId`, timestamps, `statusHistory` | No | n/a | Backend only |
@@ -95,11 +95,19 @@ Only some fields appear on the form. The **HTML id (current)** column shows the 
 
 `phone`, `email`, and `receiptAvailable` are not used for the decision. Add them to this request only when the team starts saving full records in the database.
 
-## Implementation Status (October 27, 2026)
+## Implementation Status (Milestone 4, November 2026)
 
-| Fields | Milestone 2 (browser) | Week 8–9 backend | Planned |
+| Fields | Milestone 2 (browser) | Milestone 4 backend and AWS | Notes |
 |---|---|---|---|
-| User-entered and user-selected fields | Yes | Yes (the 7 API fields) | n/a |
-| Order record fields | Yes, from fictional records in the browser | Yes, from fictional records in the backend (`finalSale` and `clearance` not checked yet) | DynamoDB (Week 11) |
-| `decision`, `decisionReason` | Yes | Partly (stops at the first failed rule) | n/a |
-| `returnId`, `status`, timestamps, `statusHistory` | No (M2 is a preview only, no record is saved) | No | Backend + DynamoDB (Week 11) |
+| User-entered and user-selected fields | Captured by the browser | Seven validated API request fields | Browser validation is only a convenience; backend validation is authoritative. |
+| Order record fields | Fictional records in the browser | Fictional trusted records in `backend/backend.js`; `finalSale` and `clearance` are checked (BR-4) | Order data is not yet stored in a live Orders table. |
+| `decision`, `decisionReason` | Browser-side decision | Backend checks BR-1 through BR-7 and collects all applicable failed reasons (BR-6) | If BR-2 fails, evaluation stops because no trusted order item exists. |
+| `returnId`, `status`, timestamps, `statusHistory` | No persistent record | Backend creates status and history; AWS Lambda assigns an `RR-` UUID and DynamoDB saves Approved returns | Rejected decisions are not persisted; local Express does not save. |
+
+### Current Milestone 4 notes
+
+- The browser sends exactly seven contract fields to `POST /api/returns`.
+- The AWS Lambda implementation creates an `RR-` plus UUID confirmation number only for successfully saved Approved returns.
+- AWS DynamoDB stores approved return records and active-item markers; rejected requests are not retrievable by confirmation number.
+- The local Express version does not persist approved returns.
+- The order catalog remains fictional data in the backend, not a live orders table.
