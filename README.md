@@ -40,7 +40,7 @@ The rules that drive the decision are listed in [Business Rules](#business-rules
 |---|---|---|
 | **Brieana Dinh** | Team leader; quality and integration approval | Backend and business rules; Part D and final integration |
 | **Danna Z. Gonzalez** | Business problem, main transaction and scope | Requirements context and Part A presentation; reviews README business rules |
-| **Samantha Abi-Ranched** | Stakeholders and requirements | Frontend and Part C presentation |
+| **Samantha Abi-Rached** | Stakeholders and requirements | Frontend and Part C presentation |
 | **Justin Vu** | Business rules and transaction states | API Gateway, Lambda, DynamoDB; Parts E and F |
 | **Nhu Tran** | Team charter and GitHub setup | Repository documentation, cleanup and testing; Parts B and G |
 
@@ -89,8 +89,8 @@ All Milestone 1 documents live in the `/docs` folder of this repository.
 |---|---|---|
 | `TigerSteps_business-problem.docx` | Business problem, why it matters, in-scope and out-of-scope boundaries | Danna Z. Gonzalez |
 | `TigerSteps_main-transaction.docx` | Transaction event, trigger, inputs, system action, outcome, official record | Danna Z. Gonzalez |
-| `TigerSteps_stakeholders.docx` | Four stakeholder groups and their needs | Samantha Abi-Ranched |
-| `TigerSteps_requirements.docx` | Seven functional and five non-functional requirements | Samantha Abi-Ranched |
+| `TigerSteps_stakeholders.docx` | Four stakeholder groups and their needs | Samantha Abi-Rached |
+| `TigerSteps_requirements.docx` | Seven functional and five non-functional requirements | Samantha Abi-Rached |
 | `TigerSteps_Business_Rules_States.docx` | Seven business rules (BR-1 to BR-7) and six transaction states | Justin Vu |
 | `TigerSteps_TeamCharterGroup8.docx` | Team charter, meeting cadence, working agreements | Nhu Tran |
 | `TigerSteps_architecture.docx` | System architecture and integration | Group 8 |
